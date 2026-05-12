@@ -48,19 +48,19 @@ export const TANGRAM_CATEGORIES: Record<string, { name: string; score: number }>
 }
 
 export const TANGRAM_TARGETS: TangramTarget[] = [
-  { name: '三角', category: 'basic', image: 'tangram/basic-三角.png', score: 10 },
-  { name: '方形', category: 'basic', image: 'tangram/basic-方形.png', score: 10 },
-  { name: '长方形', category: 'basic', image: 'tangram/basic-长方形.png', score: 10 },
-  { name: '平行四边形', category: 'basic', image: 'tangram/basic-平行四边形.png', score: 10 },
-  { name: '梯形', category: 'basic', image: 'tangram/basic-梯形.png', score: 10 },
-  { name: '天鹅', category: 'animal', image: 'tangram/animal-天鹅.png', score: 20 },
-  { name: '猫', category: 'animal', image: 'tangram/animal-猫.png', score: 20 },
-  { name: '兔子', category: 'animal', image: 'tangram/animal-兔子.png', score: 20 },
-  { name: '狐狸', category: 'animal', image: 'tangram/animal-狐狸.png', score: 20 },
-  { name: '乌龟', category: 'animal', image: 'tangram/animal-乌龟.png', score: 20 },
-  ...Array.from({ length: 10 }, (_, i) => ({ name: `数字${i}`, category: 'number', image: `tangram/number-${i}.png`, score: 25 })),
-  ...'ABCDEFGH'.split('').map(c => ({ name: `字母${c}`, category: 'letter', image: `tangram/letter-${c}.png`, score: 25 })),
-  ...['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'].map(z => ({ name: z, category: 'zodiac', image: `tangram/zodiac-${z}.png`, score: 30 })),
+  { name: '三角', category: 'basic', image: 'tangram-parts/basic-三角.png', score: 10 },
+  { name: '方形', category: 'basic', image: 'tangram-parts/basic-方形.png', score: 10 },
+  { name: '长方形', category: 'basic', image: 'tangram-parts/basic-长方形.png', score: 10 },
+  { name: '平行四边形', category: 'basic', image: 'tangram-parts/basic-平行四边形.png', score: 10 },
+  { name: '梯形', category: 'basic', image: 'tangram-parts/basic-梯形.png', score: 10 },
+  { name: '天鹅', category: 'animal', image: 'tangram-parts/animal-天鹅.png', score: 20 },
+  { name: '猫', category: 'animal', image: 'tangram-parts/animal-猫.png', score: 20 },
+  { name: '兔子', category: 'animal', image: 'tangram-parts/animal-兔子.png', score: 20 },
+  { name: '狐狸', category: 'animal', image: 'tangram-parts/animal-狐狸.png', score: 20 },
+  { name: '乌龟', category: 'animal', image: 'tangram-parts/animal-乌龟.png', score: 20 },
+  ...Array.from({ length: 10 }, (_, i) => ({ name: `数字${i}`, category: 'number', image: `tangram-parts/number-${i}.png`, score: 25 })),
+  ...'ABCDEFGH'.split('').map(c => ({ name: `字母${c}`, category: 'letter', image: `tangram-parts/letter-${c}.png`, score: 25 })),
+  ...['鼠','牛','虎','兔','龙','蛇','马','羊','猴','鸡','狗','猪'].map(z => ({ name: z, category: 'zodiac', image: `tangram-parts/zodiac-${z}.png`, score: 30 })),
 ]
 
 let pieceIdCounter = 0
