@@ -122,6 +122,7 @@ function handleCellClick(row: number, col: number) {
 
 function handleValueClick(value: number) {
   if (isComplete.value) return
+  if (preventClick) { preventClick = false; return }
   selectedValue.value = value
   if (selectedCell.value) {
     fillCell(selectedCell.value.row, selectedCell.value.col, value)
@@ -217,6 +218,15 @@ let dragEl: HTMLElement | null = null
 let dragStartX = 0
 let dragStartY = 0
 let hasMoved = false
+let preventClick = false
+let hoveredCell: HTMLElement | null = null
+
+function clearHoverHighlight() {
+  if (hoveredCell) {
+    hoveredCell.classList.remove('hover-target', 'hover-invalid')
+    hoveredCell = null
+  }
+}
 
 function onDragStart(e: MouseEvent | TouchEvent, value: number) {
   if (isComplete.value) return
@@ -225,49 +235,89 @@ function onDragStart(e: MouseEvent | TouchEvent, value: number) {
   dragValue.value = value
   dragEmoji.value = gameModes[mode.value].items[value - 1]
   hasMoved = false
+  preventClick = false
   const pt = 'touches' in e ? e.touches[0] : e
   dragStartX = pt.clientX
   dragStartY = pt.clientY
+  const target = e.currentTarget as HTMLElement
+  target.classList.add('dragging-source')
 }
 
 function onDragMove(e: MouseEvent | TouchEvent) {
   if (!dragging.value) return
   const pt = 'touches' in e ? e.touches[0] : e
+  // Start drag after 8px threshold
   if (!hasMoved && (Math.abs(pt.clientX - dragStartX) > 8 || Math.abs(pt.clientY - dragStartY) > 8)) {
     hasMoved = true
+    preventClick = true
     dragEl = document.createElement('div')
-    dragEl.className = 'drag-floating'
     dragEl.textContent = dragEmoji.value
-    dragEl.style.cssText = 'position:fixed;pointer-events:none;z-index:200;font-size:2.5rem;transform:translate(-50%,-50%);'
+    dragEl.style.cssText = 'position:fixed;pointer-events:none;z-index:200;font-size:2.5rem;transform:translate(-50%,-50%);filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3));'
     document.body.appendChild(dragEl)
   }
   if (dragEl) {
     dragEl.style.left = pt.clientX + 'px'
     dragEl.style.top = pt.clientY + 'px'
   }
+  // Highlight hovered cell
+  clearHoverHighlight()
+  if (!hasMoved) return
+  const el = document.elementFromPoint(pt.clientX, pt.clientY)
+  if (!el) return
+  const cell = el.closest('[data-cell-row]') as HTMLElement | null
+  if (!cell) return
+  const row = parseInt(cell.dataset.cellRow || '')
+  const col = parseInt(cell.dataset.cellCol || '')
+  if (isNaN(row) || isNaN(col)) return
+  if (!isFixed(row, col) && userBoard.value[row]?.[col] === 0) {
+    cell.classList.add('hover-target')
+    hoveredCell = cell
+  } else {
+    cell.classList.add('hover-invalid')
+    hoveredCell = cell
+  }
 }
 
 function onDragEnd(e: MouseEvent | TouchEvent) {
   if (!dragging.value) return
   dragging.value = false
-  dragValue.value = null
+  clearHoverHighlight()
+  // Remove source highlight
+  document.querySelectorAll('.input-btn.dragging-source').forEach(b => b.classList.remove('dragging-source'))
   if (dragEl) {
     const pt = 'changedTouches' in e ? (e as TouchEvent).changedTouches[0] : (e as MouseEvent)
     const el = document.elementFromPoint(pt.clientX, pt.clientY)
-    if (el) {
+    if (el && dragValue.value !== null) {
       const cell = el.closest('[data-cell-row]') as HTMLElement | null
       if (cell) {
         const row = parseInt(cell.dataset.cellRow || '')
         const col = parseInt(cell.dataset.cellCol || '')
-        if (!isNaN(row) && !isNaN(col) && dragValue.value !== null) {
-          selectedCell.value = { row, col }
-          fillCell(row, col, dragValue.value)
+        if (!isNaN(row) && !isNaN(col)) {
+          if (!isFixed(row, col) && userBoard.value[row]?.[col] === 0) {
+            selectedCell.value = { row, col }
+            fillCell(row, col, dragValue.value)
+          } else {
+            // Dropped on occupied cell — show error
+            selectedCell.value = { row, col }
+            const cells = document.querySelectorAll('.cell')
+            const idx = row * size.value + col
+            const targetCell = cells[idx] as HTMLElement
+            if (targetCell) {
+              targetCell.classList.add('error-shake')
+              setTimeout(() => targetCell.classList.remove('error-shake'), 500)
+            }
+            const itemName = gameModes[mode.value].names.zh[dragValue.value - 1]
+            sound.playError()
+            speech.speak('这里不能放' + itemName, 'zh-CN')
+            game.showOverlay('error', { message: '这里不能放' + itemName + '哦！再想一想吧！' })
+          }
         }
       }
     }
     dragEl.remove()
     dragEl = null
   }
+  dragValue.value = null
   hasMoved = false
 }
 
@@ -546,5 +596,20 @@ watch(() => game.currentScreen, (screen) => {
   border-color: var(--primary);
   background: #FFF5E6;
   transform: scale(1.1);
+}
+
+.input-btn.dragging-source {
+  opacity: 0.4;
+  transform: scale(0.85);
+}
+
+.cell.hover-target {
+  background: #E8F5E9;
+  box-shadow: inset 0 0 0 3px var(--success);
+}
+
+.cell.hover-invalid {
+  background: #FFEBEE;
+  box-shadow: inset 0 0 0 3px var(--danger);
 }
 </style>
