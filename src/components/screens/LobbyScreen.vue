@@ -86,6 +86,12 @@ const { getTotalScore } = useGameServices()
       >
         <span class="game-icon">🗼</span><span class="game-name">汉诺塔</span>
       </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('tangram-config')"
+      >
+        <span class="game-icon">🧩</span><span class="game-name">七巧板</span>
+      </button>
     </div>
   </div>
 </template>

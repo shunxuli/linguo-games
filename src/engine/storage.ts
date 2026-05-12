@@ -83,4 +83,8 @@ export class GameStorage {
   // Hanoi
   setHanoiRings(r: number): void { localStorage.setItem('hanoi_rings', r.toString()) }
   getHanoiRings(): number | null { const s = localStorage.getItem('hanoi_rings'); return s ? parseInt(s, 10) : null }
+
+  // Tangram
+  setTangramDifficulty(d: string): void { localStorage.setItem('tangram_difficulty', d) }
+  getTangramDifficulty(): string | null { return localStorage.getItem('tangram_difficulty') }
 }
