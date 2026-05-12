@@ -47,6 +47,13 @@ const { getTotalScore } = useGameServices()
         <span class="game-icon">🧩</span>
         <span class="game-name">拼图</span>
       </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('memory-config')"
+      >
+        <span class="game-icon">🧠</span>
+        <span class="game-name">记忆卡</span>
+      </button>
     </div>
   </div>
 </template>

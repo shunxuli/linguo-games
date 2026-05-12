@@ -8,6 +8,8 @@ import PuzzleConfig from './components/screens/PuzzleConfig.vue'
 import SudokuGame from './components/screens/SudokuGame.vue'
 import MathGame from './components/screens/MathGame.vue'
 import PuzzleGame from './components/screens/PuzzleGame.vue'
+import MemoryConfig from './components/screens/MemoryConfig.vue'
+import MemoryGame from './components/screens/MemoryGame.vue'
 import TutorialModal from './components/modals/TutorialModal.vue'
 import SettingsModal from './components/modals/SettingsModal.vue'
 import ErrorModal from './components/modals/ErrorModal.vue'
@@ -66,6 +68,18 @@ function isActive(screen: string) {
     :class="{ active: isActive('puzzle-game') }"
   >
     <PuzzleGame />
+  </div>
+  <div
+    class="screen"
+    :class="{ active: isActive('memory-config') }"
+  >
+    <MemoryConfig />
+  </div>
+  <div
+    class="screen game-screen"
+    :class="{ active: isActive('memory-game') }"
+  >
+    <MemoryGame />
   </div>
 
   <TutorialModal>
