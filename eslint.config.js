@@ -7,6 +7,14 @@ export default tseslint.config(
   tseslint.configs.recommended,
   ...pluginVue.configs['flat/recommended'],
   {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+    },
+  },
+  {
     files: ['**/*.{ts,vue}'],
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn',
@@ -14,6 +22,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist/', 'node_modules/', '*.config.*'],
+    ignores: ['dist/', 'node_modules/', '*.config.*', 'src/__tests__/setup.ts'],
   },
 )

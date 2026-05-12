@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import { useGameStore } from '../../stores/game'
+import { useGameServices } from '../../stores/gameServices'
 
 const game = useGameStore()
+const { getTotalScore } = useGameServices()
 </script>
 
 <template>
   <div class="lobby-container">
-    <h1 class="lobby-title">
-      果果乐园
-    </h1>
+    <div class="lobby-header">
+      <h1 class="lobby-title">
+        果果乐园
+      </h1>
+      <button
+        class="settings-btn"
+        @click="game.showOverlay('settings')"
+      >
+        ⚙️
+      </button>
+    </div>
+    <div class="score-display">
+      ⭐ {{ getTotalScore() }} 分
+    </div>
     <p class="lobby-subtitle">
       选择一个游戏开始吧！
     </p>
@@ -46,13 +59,35 @@ const game = useGameStore()
   padding: 20px;
 }
 
+.lobby-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
 .lobby-title {
   font-size: 2.2rem;
   font-weight: 800;
   color: var(--primary);
   text-shadow: 2px 2px 0px rgba(255,140,66,0.2);
-  margin-bottom: 6px;
   letter-spacing: 2px;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.score-display {
+  font-size: 1.2rem;
+  color: var(--warning);
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .lobby-subtitle {
