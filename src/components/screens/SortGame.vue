@@ -41,29 +41,91 @@ watch(() => game.currentScreen, (screen) => {
 })
 
 function selectItem(index: number) {
-  if (isComplete.value) return
+  if (isComplete.value || dragMoved.value) return
   if (selectedIdx.value === null) {
     selectedIdx.value = index
   } else if (selectedIdx.value === index) {
     selectedIdx.value = null
   } else {
-    // Swap
-    const i1 = selectedIdx.value
-    const i2 = index;
-    [items.value[i1], items.value[i2]] = [items.value[i2], items.value[i1]];
-    selectedIdx.value = null
-    swaps.value++
-    score.value = Math.max(0, baseScore.value - swaps.value)
-
-    if (isSorted(items.value)) {
-      isComplete.value = true
-      addScore(score.value)
-      sound.playWin()
-      speech.speak('排序完成！', 'zh-CN')
-      game.returnScreen = 'sort-config'
-      game.showOverlay('win', { message: '排列正确！', score: score.value })
-    }
+    doSwap(selectedIdx.value, index)
   }
+}
+
+function doSwap(i1: number, i2: number) {
+  if (i1 === i2) return;
+  [items.value[i1], items.value[i2]] = [items.value[i2], items.value[i1]]
+  selectedIdx.value = null
+  swaps.value++
+  score.value = Math.max(0, baseScore.value - swaps.value)
+
+  if (isSorted(items.value)) {
+    isComplete.value = true
+    addScore(score.value)
+    sound.playWin()
+    speech.speak('排序完成！', 'zh-CN')
+    game.returnScreen = 'sort-config'
+    game.showOverlay('win', { message: '排列正确！', score: score.value })
+  }
+}
+
+// Drag support
+const dragMoved = ref(false)
+const dragSource = ref<number | null>(null)
+let dragSortEl: HTMLElement | null = null
+let dragSortStartX = 0
+let dragSortStartY = 0
+let dragSortHasMoved = false
+
+function onSortDragStart(e: MouseEvent | TouchEvent, index: number) {
+  if (isComplete.value) return
+  e.preventDefault()
+  dragSource.value = index
+  dragSortHasMoved = false
+  dragMoved.value = false
+  const pt = 'touches' in e ? e.touches[0] : e
+  dragSortStartX = pt.clientX
+  dragSortStartY = pt.clientY
+}
+
+function onSortDragMove(e: MouseEvent | TouchEvent) {
+  if (dragSource.value === null) return
+  const pt = 'touches' in e ? e.touches[0] : e
+  if (!dragSortHasMoved && (Math.abs(pt.clientX - dragSortStartX) > 8 || Math.abs(pt.clientY - dragSortStartY) > 8)) {
+    dragSortHasMoved = true
+    dragMoved.value = true
+    const item = items.value[dragSource.value]
+    dragSortEl = document.createElement('div')
+    dragSortEl.style.cssText = `position:fixed;pointer-events:none;z-index:200;padding:8px;border-radius:var(--radius-sm);background:var(--card-bg);border:3px solid var(--secondary);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:2rem;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(0,0,0,0.2);`
+    dragSortEl.innerHTML = `<span style="font-size:2rem">${item.emoji}</span><span style="font-size:0.7rem;color:#888">${item.label}</span>`
+    document.body.appendChild(dragSortEl)
+  }
+  if (dragSortEl) {
+    dragSortEl.style.left = pt.clientX + 'px'
+    dragSortEl.style.top = pt.clientY + 'px'
+  }
+}
+
+function onSortDragEnd(e: MouseEvent | TouchEvent) {
+  if (dragSource.value === null) return
+  if (dragSortEl) {
+    const pt = 'changedTouches' in e ? (e as TouchEvent).changedTouches[0] : (e as MouseEvent)
+    const el = document.elementFromPoint(pt.clientX, pt.clientY)
+    if (el) {
+      const itemEl = el.closest('.sort-item') as HTMLElement | null
+      if (itemEl) {
+        const allItems = document.querySelectorAll('.sort-item')
+        const targetIdx = Array.from(allItems).indexOf(itemEl)
+        if (targetIdx >= 0 && targetIdx !== dragSource.value) {
+          doSwap(dragSource.value, targetIdx)
+        }
+      }
+    }
+    dragSortEl.remove()
+    dragSortEl = null
+  }
+  dragSource.value = null
+  dragSortHasMoved = false
+  setTimeout(() => { dragMoved.value = false }, 50)
 }
 
 function handleBack() {
@@ -85,9 +147,15 @@ function handleBack() {
       <span class="score">⭐ {{ score }}</span>
     </div>
     <p class="prompt">
-      从小到大排好序 （点击两个交换）
+      从小到大排好序 （点击或拖动交换）
     </p>
-    <div class="sort-row">
+    <div
+      class="sort-row"
+      @mousemove="onSortDragMove"
+      @touchmove.prevent="onSortDragMove"
+      @mouseup="onSortDragEnd"
+      @touchend="onSortDragEnd"
+    >
       <div
         v-for="(item, i) in items"
         :key="item.id"
@@ -97,6 +165,8 @@ function handleBack() {
           correct: isComplete,
         }"
         @click="selectItem(i)"
+        @mousedown="onSortDragStart($event, i)"
+        @touchstart="onSortDragStart($event, i)"
       >
         <span class="item-emoji">{{ item.emoji }}</span>
         <span class="item-label">{{ item.label }}</span>
