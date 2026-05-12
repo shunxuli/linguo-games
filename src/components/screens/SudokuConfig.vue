@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, gameModes, sudokuDifficulties, type GameMode } from '../../stores/gameServices'
 
@@ -11,11 +11,23 @@ const selectedSize = ref<number>(storage.getLastSize() || 4)
 
 const canStart = computed(() => selectedMode.value && selectedSize.value)
 
+watch(() => game.currentScreen, (screen) => {
+  if (screen === 'sudoku-config') {
+    const m = storage.getLastMode()
+    if (m) selectedMode.value = m as GameMode
+    const s = storage.getLastSize()
+    if (s) selectedSize.value = s
+  }
+})
+
 function selectMode(m: GameMode) { selectedMode.value = m; storage.setLastMode(m) }
 function selectSize(s: number) { selectedSize.value = s; storage.setLastSize(s) }
 
 function start() {
   if (!canStart.value) return
+  // Ensure defaults are saved
+  storage.setLastMode(selectedMode.value)
+  storage.setLastSize(selectedSize.value)
   game.navigateTo('sudoku-game')
 }
 </script>

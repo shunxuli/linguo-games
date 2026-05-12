@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, gameModes, sudokuDifficulties, type GameMode } from '../../stores/gameServices'
 import { SudokuEngine, createSeededRandom } from '../../engine/sudoku'
@@ -267,14 +267,23 @@ function onDragEnd(e: MouseEvent | TouchEvent) {
   hasMoved = false
 }
 
-onMounted(() => {
+function initGame() {
   sound.initFromStorage()
   speech.initFromStorage()
+  // Re-read config from storage
+  const lm = storage.getLastMode() as GameMode | null
+  if (lm) mode.value = lm
+  const ls = storage.getLastSize()
+  if (ls) size.value = ls
   const restored = loadSavedState()
   if (!restored || puzzle.value.length === 0 || puzzle.value.length !== size.value) {
     generatePuzzle()
   }
-})
+}
+
+watch(() => game.currentScreen, (screen) => {
+  if (screen === 'sudoku-game') initGame()
+}, { immediate: true })
 </script>
 
 <template>

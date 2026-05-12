@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, watch, watchEffect } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, puzzleSizes } from '../../stores/gameServices'
 import { PATTERNS, drawPattern } from '../../engine/puzzle'
@@ -13,6 +13,15 @@ const previewUrl = ref('')
 
 const pattern = computed(() => PATTERNS[patternIndex.value])
 const canStart = computed(() => selectedSize.value > 0)
+
+watch(() => game.currentScreen, (screen) => {
+  if (screen === 'puzzle-config') {
+    const pi = storage.getPuzzleLastPatternIndex()
+    if (pi !== null) patternIndex.value = pi
+    const ps = storage.getPuzzleLastSize()
+    if (ps) selectedSize.value = ps
+  }
+})
 
 function renderPreview() {
   const canvas = document.createElement('canvas')
@@ -34,7 +43,13 @@ function prev() { patternIndex.value = (patternIndex.value - 1 + PATTERNS.length
 function next() { patternIndex.value = (patternIndex.value + 1) % PATTERNS.length; storage.setPuzzleLastPatternIndex(patternIndex.value) }
 function randomPat() { patternIndex.value = Math.floor(Math.random() * PATTERNS.length); storage.setPuzzleLastPatternIndex(patternIndex.value) }
 function selectSize(s: number) { selectedSize.value = s; storage.setPuzzleLastSize(s) }
-function start() { if (canStart.value) game.navigateTo('puzzle-game') }
+function start() {
+  if (canStart.value) {
+    storage.setPuzzleLastPatternIndex(patternIndex.value)
+    storage.setPuzzleLastSize(selectedSize.value)
+    game.navigateTo('puzzle-game')
+  }
+}
 </script>
 
 <template>

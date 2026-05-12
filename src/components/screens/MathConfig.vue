@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, mathRanges } from '../../stores/gameServices'
 
@@ -12,6 +12,15 @@ const selectedRange = ref<number>(storage.getLastRange() || 10)
 
 const canStart = computed(() => selectedOp.value && selectedRange.value)
 
+watch(() => game.currentScreen, (screen) => {
+  if (screen === 'math-config') {
+    const o = storage.getLastOp()
+    if (o) selectedOp.value = o as Op
+    const r = storage.getLastRange()
+    if (r) selectedRange.value = r
+  }
+})
+
 const ops = [
   { key: 'add' as const, name: '➕ 加法', icon: '➕' },
   { key: 'sub' as const, name: '➖ 减法', icon: '➖' },
@@ -23,6 +32,8 @@ function selectRange(r: number) { selectedRange.value = r; storage.setLastRange(
 
 function start() {
   if (!canStart.value) return
+  storage.setLastOp(selectedOp.value)
+  storage.setLastRange(selectedRange.value)
   game.navigateTo('math-game')
 }
 </script>

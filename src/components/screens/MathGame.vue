@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, mathRanges } from '../../stores/gameServices'
 import { MathEngine } from '../../engine/math'
@@ -117,10 +117,22 @@ function handleHelp() {
   )
 }
 
-onMounted(() => {
-  init()
-  generateQuestion()
-})
+watch(() => game.currentScreen, (screen) => {
+  if (screen === 'math-game') {
+    init()
+    // Re-read config from storage
+    const so = storage.getLastOp()
+    if (so) op.value = so as MathOp
+    const sr = storage.getLastRange()
+    if (sr) range.value = sr
+    streak.value = 0
+    correctCount.value = 0
+    totalCount.value = 0
+    score.value = 0
+    hintsUsed.value = 0
+    generateQuestion()
+  }
+}, { immediate: true })
 </script>
 
 <template>

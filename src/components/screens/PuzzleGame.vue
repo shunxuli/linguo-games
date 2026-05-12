@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, puzzleSizes } from '../../stores/gameServices'
 import { PATTERNS, generatePieces, isFullyCorrect, isPieceCorrect, createSeededRandom, drawPattern, type PuzzlePiece } from '../../engine/puzzle'
@@ -44,10 +44,20 @@ function renderFullImage() {
   referenceUrl.value = refCanvas.toDataURL()
 }
 
-onMounted(() => {
-  renderFullImage()
-  pieces.value = generatePieces(400, size.value, pattern.value, createSeededRandom(Date.now()))
-})
+watch(() => game.currentScreen, (screen) => {
+  if (screen === 'puzzle-game') {
+    // Re-read config from storage
+    const pi = storage.getPuzzleLastPatternIndex()
+    if (pi !== null) patternIndex.value = pi
+    const ps = storage.getPuzzleLastSize()
+    if (ps) size.value = ps
+    score.value = 0
+    isComplete.value = false
+    selectedPiece.value = null
+    renderFullImage()
+    pieces.value = generatePieces(400, size.value, pattern.value, createSeededRandom(Date.now()))
+  }
+}, { immediate: true })
 
 function onPieceClick(index: number) {
   if (isComplete.value) return
