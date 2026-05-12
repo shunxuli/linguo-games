@@ -115,8 +115,7 @@ function handleBack() {
   game.showConfirm('返回', '确定要退出吗？', () => game.navigateBackToConfig())
 }
 
-const pegWidth = computed(() => `${Math.max(30, 90 / rings.value)}%`)
-const ringWidth = (r: number) => `${15 + r * 20}%`
+const ringWidth = (r: number) => `${30 + r * 24}px`
 
 // Drag support
 const dragRing = ref<number | null>(null)
@@ -145,8 +144,8 @@ function onRingDragMove(e: MouseEvent | TouchEvent) {
   if (!dragHanoiMoved && (Math.abs(pt.clientX - dragHanoiStartX) > 8 || Math.abs(pt.clientY - dragHanoiStartY) > 8)) {
     dragHanoiMoved = true
     dragHanoiEl = document.createElement('div')
-    const w = 30 + (dragRing.value || 1) * 17
-    dragHanoiEl.style.cssText = `position:fixed;pointer-events:none;z-index:200;width:${w}px;height:24px;border-radius:12px;background:${COLORS[(dragRing.value || 1) - 1 % COLORS.length]};transform:translate(-50%,-50%);box-shadow:0 4px 12px rgba(0,0,0,0.3);`
+    const w = 30 + (dragRing.value || 1) * 24
+    dragHanoiEl.style.cssText = `position:fixed;pointer-events:none;z-index:200;width:${w}px;height:28px;border-radius:14px;background:${COLORS[(dragRing.value || 1) - 1 % COLORS.length]};transform:translate(-50%,-50%);box-shadow:0 4px 12px rgba(0,0,0,0.3);`
     document.body.appendChild(dragHanoiEl)
   }
   if (dragHanoiEl) {
@@ -199,7 +198,7 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
     </div>
 
     <div class="hanoi-board">
-      <div v-for="peg in 3" :key="peg" class="peg-column" :data-peg="peg - 1" :style="{ width: pegWidth }" @click="handlePegClick(peg - 1)">
+      <div v-for="peg in 3" :key="peg" class="peg-column" :data-peg="peg - 1" @click="handlePegClick(peg - 1)">
         <div class="peg-base" />
         <div class="peg-pole" />
         <div class="peg-label">-</div>
@@ -250,8 +249,8 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
 .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .steps { font-size: 0.8rem; color: var(--text-light); white-space: nowrap; }
 
-.hanoi-board { display: flex; justify-content: space-between; width: 100%; height: 240px; gap: 8px; }
-.peg-column { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; border-radius: var(--radius-md); transition: background 0.2s; }
+.hanoi-board { display: flex; justify-content: space-around; width: 100%; height: 240px; }
+.peg-column { position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer; flex: 1; min-width: 0; border-radius: var(--radius-md); transition: background 0.2s; overflow: visible; }
 .peg-column:hover { background: rgba(0,0,0,0.03); }
 .peg-base { width: 100%; height: 6px; background: #8B7355; border-radius: 3px; position: absolute; bottom: 0; }
 .peg-pole { width: 6px; height: 85%; background: #C4A97D; border-radius: 3px; position: absolute; bottom: 6px; }
