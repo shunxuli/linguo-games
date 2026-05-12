@@ -87,23 +87,18 @@ function handleBack() {
       class="maze-grid"
       :style="{
         gridTemplateColumns: `repeat(${size}, 1fr)`,
-        gridTemplateRows: `repeat(${size}, 1fr)`,
       }"
     >
-      <div
-        v-for="(row, y) in grid"
-        :key="y"
-      >
+      <template v-for="(row, y) in grid" :key="y">
         <div
           v-for="(cell, x) in row"
-          :key="x"
+          :key="y * size + x"
           class="maze-cell"
           :style="{
-            borderTopWidth: cell.top ? '3px' : '1px',
-            borderRightWidth: cell.right ? '3px' : '1px',
-            borderBottomWidth: cell.bottom ? '3px' : '1px',
-            borderLeftWidth: cell.left ? '3px' : '1px',
-            borderColor: cell.top || cell.right || cell.bottom || cell.left ? '#333' : '#ddd',
+            borderTop: cell.top ? '4px solid #444' : '0',
+            borderRight: cell.right ? '4px solid #444' : '0',
+            borderBottom: cell.bottom ? '4px solid #444' : '0',
+            borderLeft: cell.left ? '4px solid #444' : '0',
           }"
         >
           <span
@@ -115,7 +110,7 @@ function handleBack() {
             class="goal"
           >🚩</span>
         </div>
-      </div>
+      </template>
     </div>
     <div class="controls">
       <button
@@ -154,10 +149,44 @@ function handleBack() {
 .header-btn { padding: 8px 12px; border-radius: var(--radius-sm); border: none; background: var(--card-bg); cursor: pointer; font-family: inherit; }
 .badge { padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; background: #FFF5E6; color: var(--primary); }
 .score { font-weight: 700; color: var(--primary); }
-.maze-grid { display: grid; gap: 0; width: 100%; max-width: 320px; aspect-ratio: 1; }
-.maze-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: var(--card-bg); font-size: 1.5rem; transition: border-color 0.15s; }
-.player { font-size: 1.8rem; }
-.goal { font-size: 1.6rem; }
+.maze-grid {
+  display: grid;
+  gap: 0;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 1;
+  background: #888;
+  border: 4px solid #444;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.maze-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFEF9;
+  font-size: 1.5rem;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.player {
+  font-size: 1.8rem;
+  z-index: 1;
+}
+
+.goal {
+  font-size: 1.6rem;
+  z-index: 1;
+  animation: flagPulse 1.5s infinite;
+}
+
+@keyframes flagPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
 .controls { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .ctrl-row { display: flex; gap: 12px; }
 .ctrl-btn { width: 56px; height: 56px; border-radius: var(--radius-sm); border: 2px solid #eee; background: var(--card-bg); font-size: 1.4rem; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-soft); }
