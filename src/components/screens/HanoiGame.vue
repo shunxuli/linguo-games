@@ -14,6 +14,7 @@ const state = ref<HanoiState>(initHanoi(3))
 const selectedPeg = ref<number | null>(null)
 const invalidPeg = ref<number | null>(null)
 const demoRunning = ref(false)
+const demoSpeed = ref(500)
 let demoTimer: ReturnType<typeof setInterval> | null = null
 
 const baseScore = computed(() => hanoiDifficulties[rings.value]?.score || 15)
@@ -90,12 +91,30 @@ function startDemo() {
     const { from, to } = solution[idx]
     moveRing(state.value, from, to)
     idx++
-  }, 500)
+  }, demoSpeed.value)
 }
 
 function stopDemo() {
   demoRunning.value = false
   if (demoTimer) { clearInterval(demoTimer); demoTimer = null }
+}
+
+function speedDown() {
+  const speeds = [3000, 2000, 1000, 500]
+  const current = speeds.indexOf(demoSpeed.value)
+  if (current < speeds.length - 1) {
+    demoSpeed.value = speeds[current + 1]
+    if (demoRunning.value) { stopDemo(); startDemo() }
+  }
+}
+
+function speedUp() {
+  const speeds = [3000, 2000, 1000, 500]
+  const current = speeds.indexOf(demoSpeed.value)
+  if (current > 0) {
+    demoSpeed.value = speeds[current - 1]
+    if (demoRunning.value) { stopDemo(); startDemo() }
+  }
 }
 
 function replayGame() {
@@ -194,6 +213,9 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
         <button class="header-btn small" :disabled="demoRunning || state.moves === 0" @click="handleUndo">↩ 撤销</button>
         <button class="header-btn small demo" :disabled="demoRunning || state.pegs[0].length !== state.ringCount" @click="startDemo">▶ 演示</button>
         <button v-if="demoRunning" class="header-btn small stop" @click="stopDemo">■ 停止</button>
+        <button class="header-btn small speed-btn" :disabled="demoSpeed <= 500" @click="speedUp">⏩</button>
+        <span class="speed-label">{{ demoSpeed / 1000 }}s</span>
+        <button class="header-btn small speed-btn" :disabled="demoSpeed >= 3000" @click="speedDown">⏪</button>
       </div>
     </div>
 
@@ -245,6 +267,8 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
 .header-btn.small { padding: 6px 10px; font-size: 0.8rem; }
 .header-btn.demo { background: var(--secondary); color: #fff; }
 .header-btn.stop { background: var(--danger); color: #fff; }
+.speed-btn { font-size: 0.75rem; padding: 4px 6px; }
+.speed-label { font-size: 0.75rem; color: var(--text-light); min-width: 28px; text-align: center; }
 .badge { padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; background: #FFF5E6; color: var(--primary); }
 .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .steps { font-size: 0.8rem; color: var(--text-light); white-space: nowrap; }
