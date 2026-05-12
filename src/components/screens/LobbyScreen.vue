@@ -30,29 +30,55 @@ const { getTotalScore } = useGameServices()
         class="game-card"
         @click="game.navigateTo('sudoku-config')"
       >
-        <span class="game-icon">🔢</span>
-        <span class="game-name">数独</span>
+        <span class="game-icon">🔢</span><span class="game-name">数独</span>
       </button>
       <button
         class="game-card"
         @click="game.navigateTo('math-config')"
       >
-        <span class="game-icon">🧮</span>
-        <span class="game-name">数学</span>
+        <span class="game-icon">🧮</span><span class="game-name">数学</span>
       </button>
       <button
         class="game-card"
         @click="game.navigateTo('puzzle-config')"
       >
-        <span class="game-icon">🧩</span>
-        <span class="game-name">拼图</span>
+        <span class="game-icon">🧩</span><span class="game-name">拼图</span>
       </button>
       <button
         class="game-card"
         @click="game.navigateTo('memory-config')"
       >
-        <span class="game-icon">🧠</span>
-        <span class="game-name">记忆卡</span>
+        <span class="game-icon">🧠</span><span class="game-name">记忆卡</span>
+      </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('pattern-config')"
+      >
+        <span class="game-icon">🔮</span><span class="game-name">找规律</span>
+      </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('spot-config')"
+      >
+        <span class="game-icon">🔍</span><span class="game-name">找不同</span>
+      </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('maze-config')"
+      >
+        <span class="game-icon">🗺️</span><span class="game-name">小迷宫</span>
+      </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('match-config')"
+      >
+        <span class="game-icon">🔗</span><span class="game-name">连线配对</span>
+      </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('sort-config')"
+      >
+        <span class="game-icon">📏</span><span class="game-name">排顺序</span>
       </button>
     </div>
   </div>
@@ -105,25 +131,25 @@ const { getTotalScore } = useGameServices()
 
 .game-cards {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .game-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-lg);
-  padding: 20px 14px;
+  padding: 14px 8px;
   box-shadow: var(--shadow-soft);
   cursor: pointer;
   transition: all 0.25s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   border: 3px solid transparent;
   font-family: inherit;
   font-size: inherit;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
 }
 
 .game-card:active {

@@ -53,4 +53,30 @@ export class GameStorage {
   getMemoryTheme(): string | null { return localStorage.getItem('memory_theme') }
   setMemorySize(s: number): void { localStorage.setItem('memory_size', s.toString()) }
   getMemorySize(): number | null { const s = localStorage.getItem('memory_size'); return s ? parseInt(s, 10) : null }
+
+  // Pattern
+  setPatternTheme(t: string): void { localStorage.setItem('pattern_theme', t) }
+  getPatternTheme(): string | null { return localStorage.getItem('pattern_theme') }
+  setPatternSize(s: number): void { localStorage.setItem('pattern_size', s.toString()) }
+  getPatternSize(): number | null { const s = localStorage.getItem('pattern_size'); return s ? parseInt(s, 10) : null }
+
+  // Spot
+  setSpotSize(s: number): void { localStorage.setItem('spot_size', s.toString()) }
+  getSpotSize(): number | null { const s = localStorage.getItem('spot_size'); return s ? parseInt(s, 10) : null }
+
+  // Maze
+  setMazeSize(s: number): void { localStorage.setItem('maze_size', s.toString()) }
+  getMazeSize(): number | null { const s = localStorage.getItem('maze_size'); return s ? parseInt(s, 10) : null }
+
+  // Match
+  setMatchTheme(t: string): void { localStorage.setItem('match_theme', t) }
+  getMatchTheme(): string | null { return localStorage.getItem('match_theme') }
+  setMatchSize(s: number): void { localStorage.setItem('match_size', s.toString()) }
+  getMatchSize(): number | null { const s = localStorage.getItem('match_size'); return s ? parseInt(s, 10) : null }
+
+  // Sort
+  setSortTheme(t: string): void { localStorage.setItem('sort_theme', t) }
+  getSortTheme(): string | null { return localStorage.getItem('sort_theme') }
+  setSortSize(s: number): void { localStorage.setItem('sort_size', s.toString()) }
+  getSortSize(): number | null { const s = localStorage.getItem('sort_size'); return s ? parseInt(s, 10) : null }
 }

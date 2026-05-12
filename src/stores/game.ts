@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export type Screen = 'lobby' | 'sudoku-config' | 'math-config' | 'puzzle-config' | 'memory-config' | 'sudoku-game' | 'math-game' | 'puzzle-game' | 'memory-game'
+export type Screen = 'lobby' | 'sudoku-config' | 'math-config' | 'puzzle-config' | 'memory-config' | 'pattern-config' | 'spot-config' | 'maze-config' | 'match-config' | 'sort-config' | 'sudoku-game' | 'math-game' | 'puzzle-game' | 'memory-game' | 'pattern-game' | 'spot-game' | 'maze-game' | 'match-game' | 'sort-game'
 
 export const useGameStore = defineStore('game', () => {
   const currentScreen = ref<Screen>('lobby')
@@ -20,6 +20,11 @@ export const useGameStore = defineStore('game', () => {
       'math-game': 'math-config',
       'puzzle-game': 'puzzle-config',
       'memory-game': 'memory-config',
+      'pattern-game': 'pattern-config',
+      'spot-game': 'spot-config',
+      'maze-game': 'maze-config',
+      'match-game': 'match-config',
+      'sort-game': 'sort-config',
     }
     currentScreen.value = map[currentScreen.value] || 'lobby'
     activeOverlay.value = null
