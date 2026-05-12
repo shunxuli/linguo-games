@@ -79,9 +79,13 @@ function clearSavedState() {
 
 function loadSavedState(): boolean {
   const saved = storage.getSudoku() as Record<string, unknown> | null
-  if (!saved) return false
-  mode.value = (saved.mode as GameMode) || 'number'
-  size.value = (saved.size as number) || 4
+  if (!saved || !saved.puzzle) return false
+  const savedPuzzle = saved.puzzle as unknown[]
+  if (savedPuzzle.length === 0) return false
+  const savedMode = (saved.mode as GameMode) || 'number'
+  const savedSize = (saved.size as number) || 4
+  // Only restore if mode/size match current config
+  if (savedMode !== mode.value || savedSize !== size.value) return false
   puzzle.value = (saved.puzzle as number[][]) || []
   solution.value = (saved.solution as number[][]) || []
   userBoard.value = (saved.userBoard as number[][]) || []
@@ -275,8 +279,9 @@ function initGame() {
   if (lm) mode.value = lm
   const ls = storage.getLastSize()
   if (ls) size.value = ls
+  // Try to restore saved game (loadSavedState checks config match internally)
   const restored = loadSavedState()
-  if (!restored || puzzle.value.length === 0 || puzzle.value.length !== size.value) {
+  if (!restored) {
     generatePuzzle()
   }
 }
