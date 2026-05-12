@@ -1,5 +1,26 @@
-# Vue 3 + TypeScript + Vite
+# 果果乐园 (linguo-games)
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+儿童教育游戏平台，包含数独、数学运算和拼图三款小游戏。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## 技术栈
+
+- Vue 3 (Composition API)
+- TypeScript
+- Pinia (状态管理)
+- Vite (构建工具)
+- Vitest (单元测试)
+
+## 开发
+
+```bash
+npm install
+npm run dev      # 启动开发服务器
+npm run lint     # 代码检查
+npm run test     # 运行测试
+npm run build    # 构建生产版本
+```
+
+## 部署
+
+构建产物为纯静态文件，可部署到任意静态文件服务器。
+GitHub Pages 地址：`https://shunxuli.github.io/linguo-games/`
