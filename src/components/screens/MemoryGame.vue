@@ -11,7 +11,7 @@ import { createSeededRandom } from '../../engine/sudoku'
 type ThemeKey = keyof typeof memoryThemes
 
 const game = useGameStore()
-const { speech, sound, addScore } = useGameServices()
+const { speech, sound, addScore, storage } = useGameServices()
 
 const themeKey = ref<ThemeKey>('emoji')
 const gridSize = ref(2)
@@ -45,8 +45,14 @@ function initGame() {
 }
 
 watch(() => game.currentScreen, (screen) => {
-  if (screen === 'memory-game') initGame()
-})
+  if (screen === 'memory-game') {
+    const t = storage.getMemoryTheme()
+    if (t) themeKey.value = t as ThemeKey
+    const s = storage.getMemorySize()
+    if (s) gridSize.value = s
+    initGame()
+  }
+}, { immediate: true })
 
 function handleCardClick(index: number) {
   if (isLocked.value || isComplete.value) return

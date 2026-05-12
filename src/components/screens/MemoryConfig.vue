@@ -8,22 +8,27 @@ const game = useGameStore()
 const { storage } = useGameServices()
 
 type ThemeKey = keyof typeof memoryThemes
-const selectedTheme = ref<ThemeKey>(storage.getLastOp?.() ? 'emoji' : 'emoji')
-const selectedSize = ref<number>(2)
+const selectedTheme = ref<ThemeKey>((storage.getMemoryTheme() as ThemeKey) || 'emoji')
+const selectedSize = ref<number>(storage.getMemorySize() || 2)
 
 const canStart = computed(() => selectedTheme.value && selectedSize.value)
 
 watch(() => game.currentScreen, (screen) => {
   if (screen === 'memory-config') {
-    // Re-read saved prefs if available
+    const t = storage.getMemoryTheme()
+    if (t) selectedTheme.value = t as ThemeKey
+    const s = storage.getMemorySize()
+    if (s) selectedSize.value = s
   }
 })
 
-function selectTheme(t: ThemeKey) { selectedTheme.value = t }
-function selectSize(s: number) { selectedSize.value = s }
+function selectTheme(t: ThemeKey) { selectedTheme.value = t; storage.setMemoryTheme(t) }
+function selectSize(s: number) { selectedSize.value = s; storage.setMemorySize(s) }
 
 function start() {
   if (!canStart.value) return
+  storage.setMemoryTheme(selectedTheme.value)
+  storage.setMemorySize(selectedSize.value)
   game.navigateTo('memory-game')
 }
 </script>

@@ -47,4 +47,10 @@ export class GameStorage {
   getPuzzleLastPatternIndex(): number | null { const s = localStorage.getItem('puzzle_lastPatternIndex'); return s ? parseInt(s, 10) : null }
   setPuzzleLastSize(s: number): void { localStorage.setItem('puzzle_lastSize', s.toString()) }
   getPuzzleLastSize(): number | null { const s = localStorage.getItem('puzzle_lastSize'); return s ? parseInt(s, 10) : null }
+
+  // Memory
+  setMemoryTheme(t: string): void { localStorage.setItem('memory_theme', t) }
+  getMemoryTheme(): string | null { return localStorage.getItem('memory_theme') }
+  setMemorySize(s: number): void { localStorage.setItem('memory_size', s.toString()) }
+  getMemorySize(): number | null { const s = localStorage.getItem('memory_size'); return s ? parseInt(s, 10) : null }
 }
