@@ -90,7 +90,7 @@ const { getTotalScore } = useGameServices()
         class="game-card"
         @click="game.navigateTo('tangram-config')"
       >
-        <span class="game-icon">🧩</span><span class="game-name">七巧板</span>
+        <span class="game-icon">🔷</span><span class="game-name">七巧板</span>
       </button>
     </div>
   </div>

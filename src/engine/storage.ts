@@ -87,4 +87,6 @@ export class GameStorage {
   // Tangram
   setTangramDifficulty(d: string): void { localStorage.setItem('tangram_difficulty', d) }
   getTangramDifficulty(): string | null { return localStorage.getItem('tangram_difficulty') }
+  setTangramTargetIdx(i: number): void { localStorage.setItem('tangram_targetIdx', i.toString()) }
+  getTangramTargetIdx(): number | null { const s = localStorage.getItem('tangram_targetIdx'); return s ? parseInt(s, 10) : null }
 }
