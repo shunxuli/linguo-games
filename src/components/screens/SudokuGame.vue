@@ -138,10 +138,10 @@ function fillCell(row: number, col: number, value: number) {
       isComplete.value = true
       clearSavedState()
       setTimeout(() => {
-        addScore(score.value)
-        game.updateScore(game.score + score.value)
-        sound.playWin()
-        game.showOverlay('win', { message: '恭喜你完成了数独！', score: score.value })
+      addScore(score.value)
+      clearSavedState()
+      game.returnScreen = 'sudoku-config'
+      game.showOverlay('win', { message: '恭喜你完成了数独！', score: score.value })
       }, 300)
     }
   } else {
@@ -195,12 +195,12 @@ function handleNewGame() {
 
 function handleBack() {
   if (isComplete.value) {
-    game.goToLobby()
+    game.navigateBackToConfig()
     return
   }
   game.showConfirm('退出', '确定要退出吗？当前进度将会保存。', () => {
     saveState()
-    game.goToLobby()
+    game.navigateBackToConfig()
   })
 }
 
@@ -251,7 +251,7 @@ function onDragEnd(e: MouseEvent | TouchEvent) {
     const pt = 'changedTouches' in e ? (e as TouchEvent).changedTouches[0] : (e as MouseEvent)
     const el = document.elementFromPoint(pt.clientX, pt.clientY)
     if (el) {
-      const cell = el.closest('[data-cell]') as HTMLElement | null
+      const cell = el.closest('[data-cell-row]') as HTMLElement | null
       if (cell) {
         const row = parseInt(cell.dataset.cellRow || '')
         const col = parseInt(cell.dataset.cellCol || '')

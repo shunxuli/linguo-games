@@ -75,6 +75,70 @@ function onPieceClick(index: number) {
   }
 }
 
+const dragPiece = ref(false)
+const dragSourceIdx = ref<number | null>(null)
+let dragPieceEl: HTMLElement | null = null
+let dragPieceStartX = 0
+let dragPieceStartY = 0
+let dragPieceMoved = false
+
+function onPieceDragStart(e: MouseEvent | TouchEvent, index: number) {
+  if (isComplete.value || pieces.value[index]?.locked) return
+  e.preventDefault()
+  dragPiece.value = true
+  dragSourceIdx.value = index
+  dragPieceMoved = false
+  const pt = 'touches' in e ? e.touches[0] : e
+  dragPieceStartX = pt.clientX
+  dragPieceStartY = pt.clientY
+}
+
+function onPieceDragMove(e: MouseEvent | TouchEvent) {
+  if (!dragPiece.value) return
+  const pt = 'touches' in e ? e.touches[0] : e
+  if (!dragPieceMoved && (Math.abs(pt.clientX - dragPieceStartX) > 8 || Math.abs(pt.clientY - dragPieceStartY) > 8)) {
+    dragPieceMoved = true
+    if (dragSourceIdx.value !== null) {
+      const piece = pieces.value[dragSourceIdx.value]
+      dragPieceEl = document.createElement('div')
+      dragPieceEl.className = 'puzzle-drag-floating'
+      dragPieceEl.style.cssText = `position:fixed;pointer-events:none;z-index:200;width:${400 / size.value}px;height:${400 / size.value}px;background-image:url(${piece.image});background-size:cover;border:2px solid var(--primary);border-radius:4px;transform:translate(-50%,-50%);`
+      document.body.appendChild(dragPieceEl)
+    }
+  }
+  if (dragPieceEl) {
+    dragPieceEl.style.left = pt.clientX + 'px'
+    dragPieceEl.style.top = pt.clientY + 'px'
+  }
+}
+
+function onPieceDragEnd(e: MouseEvent | TouchEvent) {
+  if (!dragPiece.value) return
+  dragPiece.value = false
+  if (dragPieceEl) {
+    const pt = 'changedTouches' in e ? (e as TouchEvent).changedTouches[0] : (e as MouseEvent)
+    const el = document.elementFromPoint(pt.clientX, pt.clientY)
+    if (el) {
+      const cell = el.closest('.puzzle-cell') as HTMLElement | null
+      if (cell) {
+        const allCells = document.querySelectorAll('.puzzle-cell')
+        const targetIdx = Array.from(allCells).indexOf(cell)
+        if (targetIdx >= 0 && dragSourceIdx.value !== null && targetIdx !== dragSourceIdx.value) {
+          if (!pieces.value[targetIdx].locked) {
+            swapPieces(dragSourceIdx.value, targetIdx)
+            selectedPiece.value = null
+            checkCompletion()
+          }
+        }
+      }
+    }
+    dragPieceEl.remove()
+    dragPieceEl = null
+  }
+  dragSourceIdx.value = null
+  dragPieceMoved = false
+}
+
 function swapPieces(i1: number, i2: number) {
   ;[pieces.value[i1], pieces.value[i2]] = [pieces.value[i2], pieces.value[i1]]
   pieces.value[i1].currentIndex = i1
@@ -93,7 +157,7 @@ function checkCompletion() {
 function onWin() {
   isComplete.value = true
   addScore(baseScore.value)
-  sound.playSuccess()
+  sound.playWin()
   speech.speak('恭喜你，全部拼对啦！', 'zh-CN')
 }
 
@@ -109,7 +173,7 @@ function newGame() {
 
 function goBack() {
   game.showConfirm('返回', '确定要退出游戏吗？', () => {
-    game.goToLobby()
+    game.navigateBackToConfig()
   })
 }
 </script>
@@ -153,6 +217,10 @@ function goBack() {
     <div
       class="puzzle-board"
       :style="{ gridTemplateColumns: `repeat(${size}, 1fr)` }"
+      @mousemove="onPieceDragMove"
+      @touchmove.prevent="onPieceDragMove"
+      @mouseup="onPieceDragEnd"
+      @touchend="onPieceDragEnd"
     >
       <div
         v-for="(piece, i) in pieces"
@@ -164,6 +232,8 @@ function goBack() {
           'is-complete': isComplete,
         }"
         :style="{ backgroundImage: `url(${piece.image})` }"
+        @mousedown="onPieceDragStart($event, i)"
+        @touchstart="onPieceDragStart($event, i)"
         @click="onPieceClick(i)"
       >
         <span
@@ -201,9 +271,9 @@ function goBack() {
         />
         <button
           class="win-btn"
-          @click="game.goToLobby()"
+          @click="game.navigateBackToConfig()"
         >
-          返回大厅
+          返回
         </button>
         <button
           class="win-btn secondary"

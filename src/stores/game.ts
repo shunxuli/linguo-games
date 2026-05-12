@@ -6,14 +6,23 @@ export type Screen = 'lobby' | 'sudoku-config' | 'math-config' | 'puzzle-config'
 export const useGameStore = defineStore('game', () => {
   const currentScreen = ref<Screen>('lobby')
   const score = ref(0)
-
-  // Overlay state
   const activeOverlay = ref<string | null>(null)
   const overlayData = ref<Record<string, unknown>>({})
   const confirmCallback = ref<(() => void) | null>(null)
+  const returnScreen = ref<Screen>('lobby')
 
   function navigateTo(screen: Screen) { currentScreen.value = screen }
   function goToLobby() { currentScreen.value = 'lobby'; activeOverlay.value = null }
+  function goToReturnScreen() { currentScreen.value = returnScreen.value; activeOverlay.value = null }
+  function navigateBackToConfig() {
+    const map: Record<string, Screen> = {
+      'sudoku-game': 'sudoku-config',
+      'math-game': 'math-config',
+      'puzzle-game': 'puzzle-config',
+    }
+    currentScreen.value = map[currentScreen.value] || 'lobby'
+    activeOverlay.value = null
+  }
   function updateScore(s: number) { score.value = s }
 
   function showOverlay(id: string, data?: Record<string, unknown>) {
@@ -38,7 +47,8 @@ export const useGameStore = defineStore('game', () => {
   return {
     currentScreen, score,
     activeOverlay, overlayData,
-    navigateTo, goToLobby, updateScore,
+    returnScreen,
+    navigateTo, goToLobby, goToReturnScreen, navigateBackToConfig, updateScore,
     showOverlay, hideOverlay,
     showConfirm, onConfirmYes, onConfirmNo,
   }

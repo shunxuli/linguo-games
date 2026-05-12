@@ -105,7 +105,7 @@ function handleSkip() {
 
 function handleBack() {
   game.showConfirm('退出游戏', '确定要退出数学游戏吗？', () => {
-    game.goToLobby()
+    game.navigateBackToConfig()
   })
 }
 

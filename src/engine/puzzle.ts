@@ -59,6 +59,8 @@ export const PATTERNS: Pattern[] = [
   { id: 27, name: '孔雀', type: 'custom', shape: 'peacock' },
   { id: 28, name: '彩虹漩涡', type: 'radial', style: 'swirl', colors: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'] },
   { id: 29, name: '紫色梦境', type: 'gradient', bg: ['#E6E6FA', '#DDA0DD'], elements: 'stars' },
+  { id: 30, name: '风筝', type: 'custom', shape: 'kite' },
+  { id: 31, name: '月兔', type: 'custom', shape: 'moonrabbit' },
 ]
 
 export function drawPattern(
@@ -832,6 +834,12 @@ export function drawCustom(
     case 'peacock':
       drawCustomPeacock(ctx, w, h)
       break
+    case 'kite':
+      drawCustomKite(ctx, w, h)
+      break
+    case 'moonrabbit':
+      drawCustomMoonRabbit(ctx, w, h)
+      break
   }
 }
 
@@ -839,7 +847,7 @@ export function drawCustomCat(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#FFF8DC'
   ctx.fillRect(0, 0, w, h)
@@ -971,13 +979,14 @@ export function drawCustomCat(
   ctx.beginPath()
   ctx.arc(cx + 36, cy + 88, 8, 0, Math.PI * 2)
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'cat', prng || Math.random)
 }
 
 export function drawCustomBird(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#E0F7FA'
   ctx.fillRect(0, 0, w, h)
@@ -1056,13 +1065,14 @@ export function drawCustomBird(
   ctx.moveTo(cx + 8, cy + 30)
   ctx.lineTo(cx + 12, cy + 48)
   ctx.stroke()
+  drawSurroundings(ctx, w, h, 'bird', prng || Math.random)
 }
 
 export function drawCustomDog(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#F5F5DC'
   ctx.fillRect(0, 0, w, h)
@@ -1155,13 +1165,14 @@ export function drawCustomDog(
   // grass
   ctx.fillStyle = '#90EE90'
   ctx.fillRect(0, h * 0.88, w, h * 0.12)
+  drawSurroundings(ctx, w, h, 'dog', prng || Math.random)
 }
 
 export function drawCustomHouse(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#87CEEB'
   ctx.fillRect(0, 0, w, h)
@@ -1237,6 +1248,7 @@ export function drawCustomHouse(
   ctx.beginPath()
   ctx.arc(cx + 50, cy - 95, 10, 0, Math.PI * 2)
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'house', prng || Math.random)
 }
 
 export function drawCustomUmbrella(
@@ -1288,13 +1300,14 @@ export function drawCustomUmbrella(
   ctx.ellipse(cx, h * 0.85, 50, 12, 0, 0, Math.PI * 2)
   ctx.fillStyle = 'rgba(100,150,200,0.25)'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'umbrella', prng || Math.random)
 }
 
 export function drawCustomGift(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#FFF8F0'
   ctx.fillRect(0, 0, w, h)
@@ -1338,6 +1351,7 @@ export function drawCustomGift(
   ctx.fillStyle = '#FFD700'
   drawHeart(ctx, cx - 35, cy - 5, 12)
   drawHeart(ctx, cx + 35, cy + 5, 10)
+  drawSurroundings(ctx, w, h, 'gift', prng || Math.random)
 }
 
 export function drawCustomCandle(
@@ -1394,6 +1408,7 @@ export function drawCustomCandle(
     ctx.fillStyle = 'rgba(255,255,255,0.6)'
     ctx.fill()
   }
+  drawSurroundings(ctx, w, h, 'candle', prng || Math.random)
 }
 
 export function drawCustomSnowman(
@@ -1493,13 +1508,14 @@ export function drawCustomSnowman(
   // ground
   ctx.fillStyle = '#FFF'
   ctx.fillRect(0, h * 0.88, w, h * 0.12)
+  drawSurroundings(ctx, w, h, 'snowman', prng || Math.random)
 }
 
 export function drawCustomAppleTree(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#87CEEB'
   ctx.fillRect(0, 0, w, h)
@@ -1556,13 +1572,14 @@ export function drawCustomAppleTree(
   ctx.arc(w * 0.22, h * 0.17, 22, 0, Math.PI * 2)
   ctx.arc(w * 0.28, h * 0.2, 16, 0, Math.PI * 2)
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'appletree', prng || Math.random)
 }
 
 export function drawCustomWatermelon(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#E8F5E9'
   ctx.fillRect(0, 0, w, h)
@@ -1606,13 +1623,14 @@ export function drawCustomWatermelon(
   ctx.fillRect(cx + rw + 10, cy - 20, 8, 60)
   ctx.fillStyle = '#DDD'
   ctx.fillRect(cx + rw + 8, cy - 25, 12, 10)
+  drawSurroundings(ctx, w, h, 'watermelon', prng || Math.random)
 }
 
 export function drawCustomOrange(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#FFF8E1'
   ctx.fillRect(0, 0, w, h)
@@ -1660,13 +1678,14 @@ export function drawCustomOrange(
   ctx.arc(cx - 8, cy - 5, 2, 0, Math.PI * 2)
   ctx.fillStyle = '#FFF'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'orange', prng || Math.random)
 }
 
 export function drawCustomLemon(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#FFFFE0'
   ctx.fillRect(0, 0, w, h)
@@ -1701,13 +1720,14 @@ export function drawCustomLemon(
   ctx.ellipse(cx + r * 0.4, cy - r * 0.5, 12, 6, 0.3, 0, Math.PI * 2)
   ctx.fillStyle = '#228B22'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'lemon', prng || Math.random)
 }
 
 export function drawCustomStrawberry(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#FFF0F5'
   ctx.fillRect(0, 0, w, h)
@@ -1764,6 +1784,7 @@ export function drawCustomStrawberry(
   ctx.ellipse(cx, cy + 65, 50, 10, 0, 0, Math.PI * 2)
   ctx.fillStyle = '#DDD'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'strawberry', prng || Math.random)
 }
 
 export function drawCustomFish(
@@ -1850,13 +1871,14 @@ export function drawCustomFish(
   ctx.strokeStyle = '#000'
   ctx.lineWidth = 1.5
   ctx.stroke()
+  drawSurroundings(ctx, w, h, 'fish', prng || Math.random)
 }
 
 export function drawCustomButterfly(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#E6F3FF'
   ctx.fillRect(0, 0, w, h)
@@ -1944,6 +1966,7 @@ export function drawCustomButterfly(
   ctx.arc(cx + 8, cy - 58, 3, 0, Math.PI * 2)
   ctx.fillStyle = '#333'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'butterfly', prng || Math.random)
 }
 
 export function drawCustomGoldfish(
@@ -2016,6 +2039,7 @@ export function drawCustomGoldfish(
   ctx.strokeStyle = '#000'
   ctx.lineWidth = 1.5
   ctx.stroke()
+  drawSurroundings(ctx, w, h, 'goldfish', prng || Math.random)
 }
 
 export function drawCustomBee(
@@ -2106,13 +2130,14 @@ export function drawCustomBee(
   ctx.closePath()
   ctx.fillStyle = '#333'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'bee', prng || Math.random)
 }
 
 export function drawCustomCastle(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#87CEEB'
   ctx.fillRect(0, 0, w, h)
@@ -2199,13 +2224,14 @@ export function drawCustomCastle(
   // moat
   ctx.fillStyle = '#4682B4'
   ctx.fillRect(0, h * 0.88, w, h * 0.12)
+  drawSurroundings(ctx, w, h, 'castle', prng || Math.random)
 }
 
 export function drawCustomZebra(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#90EE90'
   ctx.fillRect(0, 0, w, h)
@@ -2313,6 +2339,7 @@ export function drawCustomZebra(
   ctx.arc(cx - 70, cy - 45, 6, 0, Math.PI * 2)
   ctx.fillStyle = '#000'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'zebra', prng || Math.random)
 }
 
 export function drawCustomLeopard(
@@ -2405,6 +2432,7 @@ export function drawCustomLeopard(
   ctx.strokeStyle = '#FFD700'
   ctx.lineWidth = 8
   ctx.stroke()
+  drawSurroundings(ctx, w, h, 'leopard', prng || Math.random)
 }
 
 export function drawCustomCow(
@@ -2541,13 +2569,14 @@ export function drawCustomCow(
   ctx.arc(cx + 48, cy + 8, 6, 0, Math.PI * 2)
   ctx.fillStyle = '#FFD700'
   ctx.fill()
+  drawSurroundings(ctx, w, h, 'cow', prng || Math.random)
 }
 
 export function drawCustomPeacock(
   ctx: CanvasRenderingContext2D,
   w: number,
   h: number,
-  _prng?: () => number,
+  prng?: () => number,
 ): void {
   ctx.fillStyle = '#E0F7FA'
   ctx.fillRect(0, 0, w, h)
@@ -2640,6 +2669,210 @@ export function drawCustomPeacock(
   // grass
   ctx.fillStyle = '#90EE90'
   ctx.fillRect(0, h * 0.88, w, h * 0.12)
+  drawSurroundings(ctx, w, h, 'peacock', prng || Math.random)
+}
+
+function drawStar(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  points: number,
+  outerR: number,
+  innerR: number,
+): void {
+  ctx.beginPath()
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? outerR : innerR
+    const angle = (i * Math.PI) / points - Math.PI / 2
+    const px = x + Math.cos(angle) * r
+    const py = y + Math.sin(angle) * r
+    if (i === 0) ctx.moveTo(px, py)
+    else ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+}
+
+function drawSurroundings(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  name: string,
+  prng: () => number,
+): void {
+  const configs: Record<string, Array<{ t: string; x: number; y: number; s: number; c: string }>> = {
+    kite: [{t:'sun',x:0.12,y:0.12,s:0.1,c:'#FFD700'},{t:'cloud',x:0.82,y:0.18,s:0.08,c:'#FFF'},{t:'bird',x:0.88,y:0.08,s:0.05,c:'#FF6347'},{t:'grass',x:0.15,y:0.92,s:0.06,c:'#228B22'},{t:'flower',x:0.85,y:0.88,s:0.05,c:'#FF69B4'},{t:'cloud',x:0.2,y:0.35,s:0.06,c:'#FFF'}],
+    moonrabbit: [{t:'star',x:0.08,y:0.12,s:0.04,c:'#FFD700'},{t:'star',x:0.88,y:0.08,s:0.035,c:'#FFF'},{t:'star',x:0.92,y:0.28,s:0.04,c:'#FFD700'},{t:'star',x:0.12,y:0.32,s:0.03,c:'#FFF'},{t:'cloud',x:0.75,y:0.38,s:0.05,c:'rgba(255,255,255,0.15)'},{t:'star',x:0.5,y:0.08,s:0.025,c:'#FFD700'},{t:'star',x:0.3,y:0.15,s:0.02,c:'#FFF'}],
+    cat: [{t:'grass',x:0.1,y:0.92,s:0.06,c:'#228B22'},{t:'flower',x:0.88,y:0.88,s:0.05,c:'#FF69B4'},{t:'ball',x:0.12,y:0.72,s:0.05,c:'#FF6347'},{t:'sun',x:0.85,y:0.12,s:0.08,c:'#FFD700'},{t:'grass',x:0.7,y:0.92,s:0.05,c:'#32CD32'},{t:'flower',x:0.2,y:0.82,s:0.04,c:'#9370DB'}],
+    bird: [{t:'cloud',x:0.1,y:0.18,s:0.07,c:'#FFF'},{t:'cloud',x:0.85,y:0.12,s:0.06,c:'#FFF'},{t:'leaf',x:0.12,y:0.75,s:0.05,c:'#228B22'},{t:'leaf',x:0.88,y:0.78,s:0.05,c:'#32CD32'},{t:'flower',x:0.5,y:0.9,s:0.05,c:'#FF69B4'},{t:'sun',x:0.15,y:0.1,s:0.07,c:'#FFD700'}],
+    dog: [{t:'bone',x:0.12,y:0.2,s:0.06,c:'#FFF'},{t:'ball',x:0.85,y:0.82,s:0.05,c:'#FF6347'},{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'grass',x:0.15,y:0.92,s:0.06,c:'#228B22'},{t:'flower',x:0.75,y:0.88,s:0.05,c:'#FFD700'},{t:'grass',x:0.5,y:0.92,s:0.05,c:'#32CD32'}],
+    house: [{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'cloud',x:0.15,y:0.15,s:0.07,c:'#FFF'},{t:'flower',x:0.1,y:0.85,s:0.05,c:'#FF69B4'},{t:'flower',x:0.88,y:0.85,s:0.05,c:'#FFD700'},{t:'grass',x:0.5,y:0.92,s:0.05,c:'#228B22'},{t:'stone',x:0.75,y:0.88,s:0.04,c:'#AAA'}],
+    umbrella: [{t:'drop',x:0.12,y:0.15,s:0.04,c:'rgba(100,150,200,0.5)'},{t:'drop',x:0.85,y:0.22,s:0.03,c:'rgba(100,150,200,0.4)'},{t:'drop',x:0.2,y:0.35,s:0.035,c:'rgba(100,150,200,0.45)'},{t:'cloud',x:0.75,y:0.12,s:0.06,c:'rgba(255,255,255,0.7)'},{t:'stone',x:0.15,y:0.9,s:0.05,c:'#AAA'},{t:'leaf',x:0.88,y:0.85,s:0.04,c:'#228B22'}],
+    gift: [{t:'star',x:0.12,y:0.15,s:0.04,c:'#FFD700'},{t:'star',x:0.88,y:0.12,s:0.035,c:'#FFD700'},{t:'star',x:0.85,y:0.85,s:0.04,c:'#FF69B4'},{t:'star',x:0.15,y:0.82,s:0.03,c:'#00CED1'},{t:'ball',x:0.5,y:0.12,s:0.04,c:'#FF6347'},{t:'flower',x:0.5,y:0.88,s:0.05,c:'#9370DB'}],
+    candle: [{t:'star',x:0.1,y:0.15,s:0.035,c:'#FFD700'},{t:'star',x:0.88,y:0.12,s:0.03,c:'#FFF'},{t:'star',x:0.85,y:0.82,s:0.035,c:'#FFD700'},{t:'star',x:0.15,y:0.78,s:0.025,c:'#FFF'},{t:'ball',x:0.5,y:0.88,s:0.04,c:'#FF6347'},{t:'star',x:0.5,y:0.1,s:0.02,c:'#FFD700'}],
+    snowman: [{t:'star',x:0.1,y:0.12,s:0.03,c:'#FFD700'},{t:'star',x:0.88,y:0.15,s:0.025,c:'#FFF'},{t:'star',x:0.85,y:0.35,s:0.03,c:'#FFD700'},{t:'tree',x:0.12,y:0.55,s:0.08,c:'#228B22'},{t:'gift',x:0.88,y:0.72,s:0.06,c:'#FF6347'},{t:'star',x:0.5,y:0.08,s:0.02,c:'#FFF'}],
+    appletree: [{t:'sun',x:0.88,y:0.15,s:0.08,c:'#FFD700'},{t:'cloud',x:0.15,y:0.18,s:0.06,c:'#FFF'},{t:'flower',x:0.1,y:0.88,s:0.05,c:'#FF69B4'},{t:'flower',x:0.88,y:0.88,s:0.05,c:'#FFD700'},{t:'grass',x:0.5,y:0.92,s:0.05,c:'#32CD32'},{t:'butterfly',x:0.75,y:0.25,s:0.04,c:'#9370DB'}],
+    watermelon: [{t:'leaf',x:0.12,y:0.15,s:0.05,c:'#228B22'},{t:'leaf',x:0.85,y:0.18,s:0.05,c:'#32CD32'},{t:'drop',x:0.2,y:0.3,s:0.03,c:'rgba(100,200,255,0.5)'},{t:'drop',x:0.8,y:0.35,s:0.025,c:'rgba(100,200,255,0.4)'},{t:'flower',x:0.15,y:0.85,s:0.04,c:'#FF69B4'},{t:'flower',x:0.82,y:0.82,s:0.04,c:'#FFD700'}],
+    orange: [{t:'leaf',x:0.15,y:0.15,s:0.05,c:'#228B22'},{t:'leaf',x:0.82,y:0.18,s:0.05,c:'#32CD32'},{t:'drop',x:0.25,y:0.25,s:0.03,c:'rgba(255,200,0,0.4)'},{t:'drop',x:0.78,y:0.3,s:0.025,c:'rgba(255,200,0,0.3)'},{t:'flower',x:0.12,y:0.82,s:0.04,c:'#FF69B4'},{t:'flower',x:0.85,y:0.8,s:0.04,c:'#FFD700'}],
+    lemon: [{t:'leaf',x:0.18,y:0.15,s:0.05,c:'#228B22'},{t:'leaf',x:0.8,y:0.18,s:0.05,c:'#32CD32'},{t:'drop',x:0.22,y:0.28,s:0.03,c:'rgba(255,255,0,0.4)'},{t:'drop',x:0.75,y:0.32,s:0.025,c:'rgba(255,255,0,0.3)'},{t:'flower',x:0.15,y:0.82,s:0.04,c:'#FF69B4'},{t:'flower',x:0.82,y:0.8,s:0.04,c:'#9370DB'}],
+    strawberry: [{t:'leaf',x:0.12,y:0.15,s:0.05,c:'#228B22'},{t:'leaf',x:0.85,y:0.18,s:0.05,c:'#32CD32'},{t:'drop',x:0.2,y:0.25,s:0.03,c:'rgba(255,100,100,0.4)'},{t:'drop',x:0.8,y:0.3,s:0.025,c:'rgba(255,100,100,0.3)'},{t:'flower',x:0.12,y:0.82,s:0.04,c:'#FFD700'},{t:'flower',x:0.85,y:0.8,s:0.04,c:'#FF69B4'}],
+    fish: [{t:'bubble',x:0.15,y:0.15,s:0.05,c:'#FFF'},{t:'bubble',x:0.82,y:0.22,s:0.04,c:'#FFF'},{t:'bubble',x:0.2,y:0.35,s:0.035,c:'#FFF'},{t:'seaweed',x:0.1,y:0.75,s:0.08,c:'#228B22'},{t:'seaweed',x:0.88,y:0.7,s:0.07,c:'#32CD32'},{t:'star',x:0.5,y:0.1,s:0.03,c:'#FFD700'}],
+    butterfly: [{t:'flower',x:0.12,y:0.15,s:0.05,c:'#FF69B4'},{t:'flower',x:0.85,y:0.18,s:0.05,c:'#FFD700'},{t:'flower',x:0.15,y:0.82,s:0.05,c:'#9370DB'},{t:'flower',x:0.82,y:0.8,s:0.05,c:'#FF6347'},{t:'leaf',x:0.5,y:0.1,s:0.04,c:'#228B22'},{t:'leaf',x:0.5,y:0.9,s:0.04,c:'#32CD32'}],
+    goldfish: [{t:'bubble',x:0.12,y:0.18,s:0.05,c:'#FFF'},{t:'bubble',x:0.85,y:0.25,s:0.04,c:'#FFF'},{t:'bubble',x:0.2,y:0.38,s:0.035,c:'#FFF'},{t:'seaweed',x:0.08,y:0.72,s:0.08,c:'#228B22'},{t:'seaweed',x:0.9,y:0.68,s:0.07,c:'#32CD32'},{t:'stone',x:0.5,y:0.9,s:0.06,c:'#AAA'}],
+    bee: [{t:'flower',x:0.12,y:0.15,s:0.05,c:'#FF69B4'},{t:'flower',x:0.85,y:0.18,s:0.05,c:'#FFD700'},{t:'flower',x:0.15,y:0.82,s:0.05,c:'#9370DB'},{t:'flower',x:0.82,y:0.8,s:0.05,c:'#FF6347'},{t:'leaf',x:0.5,y:0.1,s:0.04,c:'#228B22'},{t:'leaf',x:0.5,y:0.9,s:0.04,c:'#32CD32'}],
+    castle: [{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'cloud',x:0.15,y:0.18,s:0.06,c:'#FFF'},{t:'flower',x:0.1,y:0.85,s:0.05,c:'#FF69B4'},{t:'flower',x:0.88,y:0.85,s:0.05,c:'#FFD700'},{t:'grass',x:0.5,y:0.92,s:0.05,c:'#228B22'},{t:'bird',x:0.75,y:0.15,s:0.04,c:'#FF6347'}],
+    zebra: [{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'cloud',x:0.15,y:0.18,s:0.06,c:'#FFF'},{t:'grass',x:0.1,y:0.88,s:0.06,c:'#228B22'},{t:'grass',x:0.85,y:0.88,s:0.06,c:'#32CD32'},{t:'flower',x:0.5,y:0.88,s:0.05,c:'#FF69B4'},{t:'tree',x:0.12,y:0.5,s:0.08,c:'#228B22'}],
+    leopard: [{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'cloud',x:0.15,y:0.18,s:0.06,c:'#FFF'},{t:'grass',x:0.1,y:0.88,s:0.06,c:'#228B22'},{t:'grass',x:0.85,y:0.88,s:0.06,c:'#32CD32'},{t:'stone',x:0.5,y:0.88,s:0.05,c:'#AAA'},{t:'tree',x:0.88,y:0.5,s:0.08,c:'#228B22'}],
+    cow: [{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'cloud',x:0.15,y:0.18,s:0.06,c:'#FFF'},{t:'grass',x:0.1,y:0.88,s:0.06,c:'#228B22'},{t:'grass',x:0.85,y:0.88,s:0.06,c:'#32CD32'},{t:'flower',x:0.3,y:0.88,s:0.05,c:'#FF69B4'},{t:'flower',x:0.7,y:0.88,s:0.05,c:'#FFD700'}],
+    peacock: [{t:'sun',x:0.88,y:0.12,s:0.08,c:'#FFD700'},{t:'flower',x:0.12,y:0.85,s:0.05,c:'#FF69B4'},{t:'flower',x:0.85,y:0.85,s:0.05,c:'#FFD700'},{t:'grass',x:0.5,y:0.92,s:0.05,c:'#228B22'},{t:'flower',x:0.15,y:0.2,s:0.04,c:'#9370DB'},{t:'butterfly',x:0.82,y:0.25,s:0.04,c:'#FF6347'}],
+  }
+  const list = configs[name] || []
+  for (const d of list) {
+    drawDeco(ctx, d.x * w, d.y * h, d.t, d.s * Math.min(w, h), d.c, prng)
+  }
+}
+
+function drawDeco(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  type: string,
+  size: number,
+  color: string,
+  prng: () => number,
+): void {
+  ctx.save()
+  switch (type) {
+    case 'grass':
+      ctx.strokeStyle = color
+      ctx.lineWidth = Math.max(2, size * 0.15)
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath()
+        ctx.moveTo(x + i * size * 0.3 - size * 0.3, y)
+        ctx.lineTo(x + i * size * 0.3 - size * 0.45, y - size * 0.8)
+        ctx.stroke()
+      }
+      break
+    case 'flower':
+      for (let i = 0; i < 5; i++) {
+        const a = (i / 5) * Math.PI * 2
+        ctx.beginPath()
+        ctx.arc(x + Math.cos(a) * size * 0.35, y + Math.sin(a) * size * 0.35, size * 0.25, 0, Math.PI * 2)
+        ctx.fillStyle = color
+        ctx.fill()
+      }
+      ctx.beginPath(); ctx.arc(x, y, size * 0.18, 0, Math.PI * 2); ctx.fillStyle = '#FFD700'; ctx.fill()
+      break
+    case 'sun':
+      ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x, y, size * 0.45, 0, Math.PI * 2); ctx.fill()
+      ctx.strokeStyle = color; ctx.lineWidth = Math.max(2, size * 0.08)
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2
+        ctx.beginPath()
+        ctx.moveTo(x + Math.cos(a) * size * 0.55, y + Math.sin(a) * size * 0.55)
+        ctx.lineTo(x + Math.cos(a) * size * 0.85, y + Math.sin(a) * size * 0.85)
+        ctx.stroke()
+      }
+      break
+    case 'cloud':
+      ctx.fillStyle = color
+      ctx.beginPath(); ctx.arc(x, y, size * 0.45, 0, Math.PI * 2)
+      ctx.arc(x + size * 0.35, y - size * 0.12, size * 0.55, 0, Math.PI * 2)
+      ctx.arc(x + size * 0.6, y, size * 0.4, 0, Math.PI * 2); ctx.fill()
+      break
+    case 'star':
+      ctx.fillStyle = color; drawStar(ctx, x, y, 4, size * 0.55, size * 0.22); ctx.fill()
+      break
+    case 'bird':
+      ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(x, y, size * 0.45, size * 0.18, -0.3, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.moveTo(x - size * 0.25, y); ctx.lineTo(x - size * 0.55, y - size * 0.18); ctx.lineTo(x - size * 0.45, y + size * 0.08); ctx.closePath(); ctx.fill()
+      break
+    case 'bubble':
+      ctx.beginPath(); ctx.arc(x, y, size * 0.35, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fill()
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 1; ctx.stroke()
+      break
+    case 'stone':
+      ctx.beginPath(); ctx.ellipse(x, y, size * 0.45, size * 0.28, prng() * Math.PI * 2, 0, Math.PI * 2)
+      ctx.fillStyle = color; ctx.fill()
+      break
+    case 'drop':
+      ctx.beginPath(); ctx.arc(x, y, size * 0.18, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill()
+      break
+    case 'leaf':
+      ctx.beginPath(); ctx.ellipse(x, y, size * 0.4, size * 0.18, prng() * Math.PI, 0, Math.PI * 2)
+      ctx.fillStyle = color; ctx.fill()
+      break
+    case 'ball':
+      ctx.beginPath(); ctx.arc(x, y, size * 0.35, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill()
+      ctx.beginPath(); ctx.arc(x - size * 0.1, y - size * 0.1, size * 0.1, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.4)'; ctx.fill()
+      break
+    case 'bone':
+      ctx.strokeStyle = color; ctx.lineWidth = size * 0.22; ctx.beginPath(); ctx.moveTo(x - size * 0.35, y); ctx.lineTo(x + size * 0.35, y); ctx.stroke()
+      ctx.beginPath(); ctx.arc(x - size * 0.35, y - size * 0.08, size * 0.12, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill()
+      ctx.beginPath(); ctx.arc(x - size * 0.35, y + size * 0.08, size * 0.12, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.arc(x + size * 0.35, y - size * 0.08, size * 0.12, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.arc(x + size * 0.35, y + size * 0.08, size * 0.12, 0, Math.PI * 2); ctx.fill()
+      break
+    case 'tree':
+      ctx.fillStyle = '#8B4513'; ctx.fillRect(x - size * 0.08, y, size * 0.16, size * 0.5)
+      ctx.beginPath(); ctx.arc(x, y - size * 0.15, size * 0.35, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill()
+      ctx.beginPath(); ctx.arc(x - size * 0.2, y, size * 0.25, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill()
+      ctx.beginPath(); ctx.arc(x + size * 0.2, y, size * 0.25, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill()
+      break
+    case 'seaweed':
+      ctx.strokeStyle = color; ctx.lineWidth = Math.max(2, size * 0.15)
+      ctx.beginPath(); ctx.moveTo(x, y + size * 0.4); ctx.quadraticCurveTo(x + size * 0.2, y, x - size * 0.1, y - size * 0.4); ctx.stroke()
+      ctx.beginPath(); ctx.moveTo(x + size * 0.15, y + size * 0.4); ctx.quadraticCurveTo(x - size * 0.1, y, x + size * 0.25, y - size * 0.3); ctx.stroke()
+      break
+    case 'butterfly':
+      ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(x - size * 0.15, y - size * 0.08, size * 0.2, size * 0.15, -0.3, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.ellipse(x + size * 0.15, y - size * 0.08, size * 0.2, size * 0.15, 0.3, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.ellipse(x, y, size * 0.04, size * 0.15, 0, 0, Math.PI * 2); ctx.fillStyle = '#333'; ctx.fill()
+      break
+    case 'gift':
+      ctx.fillStyle = color; ctx.fillRect(x - size * 0.2, y - size * 0.15, size * 0.4, size * 0.3)
+      ctx.fillStyle = '#FFD700'; ctx.fillRect(x - size * 0.03, y - size * 0.15, size * 0.06, size * 0.3); ctx.fillRect(x - size * 0.2, y - size * 0.03, size * 0.4, size * 0.06)
+      ctx.beginPath(); ctx.arc(x, y - size * 0.18, size * 0.1, 0, Math.PI * 2); ctx.fillStyle = '#FF0000'; ctx.fill()
+      break
+  }
+  ctx.restore()
+}
+
+function drawCustomKite(ctx: CanvasRenderingContext2D, w: number, h: number): void {
+  ctx.fillStyle = '#87CEEB'; ctx.fillRect(0, 0, w, h)
+  const cx = w * 0.45, cy = h * 0.35
+  ctx.beginPath(); ctx.moveTo(cx, cy - 60); ctx.lineTo(cx + 45, cy); ctx.lineTo(cx, cy + 60); ctx.lineTo(cx - 45, cy); ctx.closePath()
+  ctx.fillStyle = '#FF6347'; ctx.fill(); ctx.strokeStyle = '#333'; ctx.lineWidth = 2; ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(cx, cy - 60); ctx.lineTo(cx, cy + 60); ctx.strokeStyle = '#FFD700'; ctx.lineWidth = 3; ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(cx - 45, cy); ctx.lineTo(cx + 45, cy); ctx.stroke()
+  ctx.strokeStyle = '#333'; ctx.lineWidth = 2
+  ctx.beginPath(); ctx.moveTo(cx, cy + 60); ctx.lineTo(cx - 10, cy + 90); ctx.lineTo(cx + 10, cy + 120); ctx.lineTo(cx - 5, cy + 150); ctx.stroke()
+  ctx.fillStyle = '#FF69B4'; ctx.beginPath(); ctx.arc(cx - 10, cy + 90, 6, 0, Math.PI*2); ctx.fill()
+  ctx.beginPath(); ctx.arc(cx + 10, cy + 120, 6, 0, Math.PI*2); ctx.fill()
+  ctx.beginPath(); ctx.arc(cx - 5, cy + 150, 6, 0, Math.PI*2); ctx.fill()
+  ctx.beginPath(); ctx.moveTo(cx, cy + 60); ctx.quadraticCurveTo(cx + 30, cy + 100, cx + 80, cy + 140); ctx.strokeStyle = '#FFF'; ctx.lineWidth = 2; ctx.stroke()
+  drawSurroundings(ctx, w, h, 'kite', Math.random)
+}
+
+function drawCustomMoonRabbit(ctx: CanvasRenderingContext2D, w: number, h: number): void {
+  ctx.fillStyle = '#0D1B2A'; ctx.fillRect(0, 0, w, h)
+  const cx = w * 0.5, cy = h * 0.45
+  ctx.beginPath(); ctx.arc(cx, cy, 70, 0, Math.PI * 2); ctx.fillStyle = '#FFFACD'; ctx.fill()
+  ctx.beginPath(); ctx.arc(cx + 25, cy - 10, 55, 0, Math.PI * 2); ctx.fillStyle = '#0D1B2A'; ctx.fill()
+  const rx = cx - 15, ry = cy - 5
+  ctx.beginPath(); ctx.ellipse(rx, ry, 18, 22, 0, 0, Math.PI * 2); ctx.fillStyle = '#FFF'; ctx.fill()
+  ctx.beginPath(); ctx.arc(rx, ry - 22, 14, 0, Math.PI * 2); ctx.fillStyle = '#FFF'; ctx.fill()
+  ctx.beginPath(); ctx.ellipse(rx - 6, ry - 38, 4, 14, -0.3, 0, Math.PI * 2); ctx.fillStyle = '#FFF'; ctx.fill()
+  ctx.beginPath(); ctx.ellipse(rx + 6, ry - 38, 4, 14, 0.3, 0, Math.PI * 2); ctx.fillStyle = '#FFF'; ctx.fill()
+  ctx.beginPath(); ctx.ellipse(rx - 6, ry - 38, 2, 10, -0.3, 0, Math.PI * 2); ctx.fillStyle = '#FFB6C1'; ctx.fill()
+  ctx.beginPath(); ctx.ellipse(rx + 6, ry - 38, 2, 10, 0.3, 0, Math.PI * 2); ctx.fillStyle = '#FFB6C1'; ctx.fill()
+  ctx.beginPath(); ctx.arc(rx - 4, ry - 24, 2.5, 0, Math.PI * 2); ctx.fillStyle = '#000'; ctx.fill()
+  ctx.beginPath(); ctx.arc(rx + 4, ry - 24, 2.5, 0, Math.PI * 2); ctx.fillStyle = '#000'; ctx.fill()
+  ctx.beginPath(); ctx.arc(rx, ry - 19, 2, 0, Math.PI * 2); ctx.fillStyle = '#FF69B4'; ctx.fill()
+  ctx.beginPath(); ctx.ellipse(rx - 12, ry - 5, 6, 4, 0.5, 0, Math.PI * 2); ctx.fillStyle = '#FFF'; ctx.fill()
+  ctx.beginPath(); ctx.ellipse(rx + 12, ry - 5, 6, 4, -0.5, 0, Math.PI * 2); ctx.fillStyle = '#FFF'; ctx.fill()
+  ctx.beginPath(); ctx.arc(rx, ry + 2, 10, 0, Math.PI * 2); ctx.fillStyle = '#D2691E'; ctx.fill()
+  ctx.strokeStyle = '#8B4513'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(rx, ry + 2, 7, 0, Math.PI * 2); ctx.stroke()
+  drawSurroundings(ctx, w, h, 'moonrabbit', Math.random)
 }
 
 export function generatePieces(

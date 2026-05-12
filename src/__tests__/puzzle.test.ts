@@ -136,8 +136,8 @@ describe('Puzzle Engine', () => {
   })
 
   describe('PATTERNS', () => {
-    it('has 30 patterns', () => {
-      expect(PATTERNS.length).toBe(30)
+    it('has patterns', () => {
+      expect(PATTERNS.length).toBeGreaterThanOrEqual(32)
     })
 
     it('each pattern has required fields', () => {

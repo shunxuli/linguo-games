@@ -19,9 +19,9 @@ const game = useGameStore()
       </p>
       <button
         class="modal-btn"
-        @click="game.goToLobby()"
+        @click="game.goToReturnScreen()"
       >
-        返回大厅
+        返回
       </button>
     </div>
   </div>
