@@ -5,66 +5,79 @@ export interface SpotQuestion {
 }
 
 const animalItems = [
-  { emoji: '🐼', label: '熊猫', cat: 'animal' },
-  { emoji: '🐱', label: '小猫', cat: 'animal' },
-  { emoji: '🐶', label: '小狗', cat: 'animal' },
-  { emoji: '🐰', label: '兔子', cat: 'animal' },
-  { emoji: '🐸', label: '青蛙', cat: 'animal' },
-  { emoji: '🐥', label: '小鸡', cat: 'animal' },
-  { emoji: '🐮', label: '奶牛', cat: 'animal' },
-  { emoji: '🦁', label: '狮子', cat: 'animal' },
+  { emoji: '🐼', label: '熊猫', cat: '动物' },
+  { emoji: '🐱', label: '小猫', cat: '动物' },
+  { emoji: '🐶', label: '小狗', cat: '动物' },
+  { emoji: '🐰', label: '兔子', cat: '动物' },
+  { emoji: '🐸', label: '青蛙', cat: '动物' },
+  { emoji: '🐥', label: '小鸡', cat: '动物' },
+  { emoji: '🐮', label: '奶牛', cat: '动物' },
+  { emoji: '🦁', label: '狮子', cat: '动物' },
+  { emoji: '🐵', label: '猴子', cat: '动物' },
+  { emoji: '🦊', label: '狐狸', cat: '动物' },
 ]
 const fruitItems = [
-  { emoji: '🍎', label: '苹果', cat: 'fruit' },
-  { emoji: '🍊', label: '橘子', cat: 'fruit' },
-  { emoji: '🍌', label: '香蕉', cat: 'fruit' },
-  { emoji: '🥝', label: '猕猴桃', cat: 'fruit' },
-  { emoji: '🍇', label: '葡萄', cat: 'fruit' },
-  { emoji: '🍓', label: '草莓', cat: 'fruit' },
-  { emoji: '🍑', label: '桃子', cat: 'fruit' },
-  { emoji: '🍒', label: '樱桃', cat: 'fruit' },
+  { emoji: '🍎', label: '苹果', cat: '水果' },
+  { emoji: '🍊', label: '橘子', cat: '水果' },
+  { emoji: '🍌', label: '香蕉', cat: '水果' },
+  { emoji: '🥝', label: '猕猴桃', cat: '水果' },
+  { emoji: '🍇', label: '葡萄', cat: '水果' },
+  { emoji: '🍓', label: '草莓', cat: '水果' },
+  { emoji: '🍑', label: '桃子', cat: '水果' },
+  { emoji: '🍒', label: '樱桃', cat: '水果' },
+  { emoji: '🍉', label: '西瓜', cat: '水果' },
+  { emoji: '🍋', label: '柠檬', cat: '水果' },
 ]
 const vehicleItems = [
-  { emoji: '🚗', label: '汽车', cat: 'vehicle' },
-  { emoji: '🚌', label: '巴士', cat: 'vehicle' },
-  { emoji: '🚲', label: '自行车', cat: 'vehicle' },
-  { emoji: '✈️', label: '飞机', cat: 'vehicle' },
-  { emoji: '🚢', label: '轮船', cat: 'vehicle' },
-  { emoji: '🚁', label: '直升机', cat: 'vehicle' },
+  { emoji: '🚗', label: '汽车', cat: '交通工具' },
+  { emoji: '🚌', label: '巴士', cat: '交通工具' },
+  { emoji: '🚲', label: '自行车', cat: '交通工具' },
+  { emoji: '✈️', label: '飞机', cat: '交通工具' },
+  { emoji: '🚢', label: '轮船', cat: '交通工具' },
+  { emoji: '🚁', label: '直升机', cat: '交通工具' },
+  { emoji: '🚂', label: '火车', cat: '交通工具' },
+  { emoji: '🛵', label: '摩托车', cat: '交通工具' },
+  { emoji: '⛵', label: '帆船', cat: '交通工具' },
+  { emoji: '🚀', label: '火箭', cat: '交通工具' },
 ]
-const colorItems = [
-  { emoji: '🔴', label: '红色', cat: 'warm' },
-  { emoji: '🟠', label: '橙色', cat: 'warm' },
-  { emoji: '🟡', label: '黄色', cat: 'warm' },
-  { emoji: '🔵', label: '蓝色', cat: 'cool' },
-  { emoji: '🟢', label: '绿色', cat: 'cool' },
-  { emoji: '🟣', label: '紫色', cat: 'cool' },
+const weatherItems = [
+  { emoji: '☀️', label: '太阳', cat: '天气' },
+  { emoji: '🌧️', label: '下雨', cat: '天气' },
+  { emoji: '⛈️', label: '雷雨', cat: '天气' },
+  { emoji: '❄️', label: '下雪', cat: '天气' },
+  { emoji: '🌪️', label: '龙卷风', cat: '天气' },
+  { emoji: '🌈', label: '彩虹', cat: '天气' },
+  { emoji: '☁️', label: '多云', cat: '天气' },
 ]
-const shapeItems = [
-  { emoji: '●', label: '圆形', cat: 'round' },
-  { emoji: '⬤', label: '大圆', cat: 'round' },
-  { emoji: '◉', label: '靶心', cat: 'round' },
-  { emoji: '▲', label: '三角形', cat: 'pointy' },
-  { emoji: '■', label: '方形', cat: 'square' },
-  { emoji: '□', label: '空心方', cat: 'square' },
+const plantItems = [
+  { emoji: '🌲', label: '松树', cat: '植物' },
+  { emoji: '🌵', label: '仙人掌', cat: '植物' },
+  { emoji: '🎄', label: '圣诞树', cat: '植物' },
+  { emoji: '🌻', label: '向日葵', cat: '植物' },
+  { emoji: '🌹', label: '玫瑰', cat: '植物' },
+  { emoji: '🌸', label: '樱花', cat: '植物' },
+  { emoji: '🍀', label: '四叶草', cat: '植物' },
 ]
 
-const spotThemes: Record<number, Array<Array<typeof animalItems>>> = {
-  2: [
-    [animalItems, fruitItems],   // animal vs fruit
-    [colorItems.slice(0, 3), colorItems.slice(3, 6)],  // warm vs cool
-    [shapeItems.slice(0, 3), shapeItems.slice(3, 6)],  // round vs pointy
-  ],
-  4: [
-    [animalItems, fruitItems, animalItems],  // 1 fruit among animals
-    [fruitItems, animalItems, fruitItems],
-    [vehicleItems, vehicleItems, fruitItems.slice(0, 2)], // 1 fruit among vehicles
-  ],
-  6: [
-    [animalItems, fruitItems, vehicleItems, vehicleItems],
-    [colorItems, shapeItems, colorItems],
-  ],
-}
+// Pre-defined question templates for guaranteed variety
+const questionTemplates: Array<{ normal: typeof animalItems; odd: typeof animalItems }> = [
+  { normal: animalItems, odd: fruitItems },
+  { normal: fruitItems, odd: animalItems },
+  { normal: animalItems, odd: vehicleItems },
+  { normal: vehicleItems, odd: animalItems },
+  { normal: fruitItems, odd: vehicleItems },
+  { normal: vehicleItems, odd: fruitItems },
+  { normal: animalItems, odd: weatherItems },
+  { normal: weatherItems, odd: animalItems },
+  { normal: fruitItems, odd: plantItems },
+  { normal: plantItems, odd: fruitItems },
+  { normal: vehicleItems, odd: weatherItems },
+  { normal: weatherItems, odd: vehicleItems },
+  { normal: animalItems, odd: plantItems },
+  { normal: plantItems, odd: animalItems },
+  { normal: weatherItems, odd: plantItems },
+  { normal: plantItems, odd: weatherItems },
+]
 
 export const spotSizes: Record<number, { name: string; score: number }> = {
   2: { name: '入门', score: 10 },
@@ -72,70 +85,34 @@ export const spotSizes: Record<number, { name: string; score: number }> = {
   6: { name: '困难', score: 50 },
 }
 
-export function generateSpotQuestion(difficulty: number, prng: () => number = Math.random): SpotQuestion {
-  let themeSets = spotThemes[difficulty]
-  if (!themeSets) themeSets = spotThemes[2]
-  const set = themeSets[Math.floor(prng() * themeSets.length)]
+export function generateSpotQuestion(
+  difficulty: number,
+  prng: () => number = Math.random,
+): SpotQuestion {
+  const count = Math.min(difficulty + 2, 6)
+  const templateIdx = Math.floor(prng() * questionTemplates.length)
+  const template = questionTemplates[templateIdx]
 
-  // Pick 1 odd item from a different category
-  const oddGroup = set[Math.floor(prng() * (set.length - 1))]
-  const odd = oddGroup[Math.floor(prng() * oddGroup.length)]
+  // Shuffle normal items and pick count-1
+  const shuffledNormals = [...template.normal]
+  for (let i = shuffledNormals.length - 1; i > 0; i--) {
+    const j = Math.floor(prng() * (i + 1));
+    [shuffledNormals[i], shuffledNormals[j]] = [shuffledNormals[j], shuffledNormals[i]]
+  }
+  const normals = shuffledNormals.slice(0, count - 1)
 
-  // Pick normal items from the first group
-  const normalGroup = set[0]
-  const normalCount = difficulty <= 2 ? 3 : difficulty + 1
-  const normals = normalGroup
-    .filter(item => item.cat !== odd.cat)
-    .slice(0, normalCount)
+  // Pick a random odd item
+  const oddIdx = Math.floor(prng() * template.odd.length)
+  const odd = template.odd[oddIdx]
 
-  // Insert odd at random position
-  const totalCount = normals.length + 1
-  const oddIndex = Math.floor(prng() * totalCount)
+  // Insert at random position
+  const oddPos = Math.floor(prng() * count)
   const items = [...normals]
-  items.splice(oddIndex, 0, odd)
+  items.splice(oddPos, 0, odd)
 
   return {
-    items: items.slice(0, difficulty + 2),
-    oddIndex: oddIndex < (difficulty + 2) ? oddIndex : 0,
-    reason: `其他都是${normals[0]?.cat === 'animal' ? '动物' : normals[0]?.cat === 'fruit' ? '水果' : normals[0]?.cat === 'vehicle' ? '交通工具' : normals[0]?.cat === 'warm' ? '暖色' : normals[0]?.cat === 'cool' ? '冷色' : normals[0]?.cat === 'round' ? '圆形' : normals[0]?.cat === 'square' ? '方形' : '同类'}！`,
+    items,
+    oddIndex: oddPos,
+    reason: `其他都是${normals[0]?.cat}！`,
   }
-}
-
-// Simplified for stable question generation
-export function generateSimpleSpotQuestion(difficulty: number): SpotQuestion {
-  const groups = [
-    [
-      { emoji: '🐼', label: '熊猫' },
-      { emoji: '🐱', label: '小猫' },
-      { emoji: '🐶', label: '小狗' },
-      { emoji: '🐰', label: '兔子' },
-    ],
-    [
-      { emoji: '🍎', label: '苹果' },
-      { emoji: '🍊', label: '橘子' },
-      { emoji: '🍌', label: '香蕉' },
-      { emoji: '🍓', label: '草莓' },
-    ],
-    [
-      { emoji: '🚗', label: '汽车' },
-      { emoji: '🚌', label: '巴士' },
-      { emoji: '🚲', label: '自行车' },
-      { emoji: '✈️', label: '飞机' },
-    ],
-    [
-      { emoji: '🔴', label: '红色' },
-      { emoji: '🟠', label: '橙色' },
-      { emoji: '🟡', label: '黄色' },
-      { emoji: '🟢', label: '绿色' },
-    ],
-  ]
-  const normalGroup = groups[0]
-  const oddGroup = groups[1]
-  const odd = oddGroup[0]
-  const count = Math.min(difficulty + 2, 6)
-  const normals = normalGroup.slice(0, count - 1)
-  const oddIndex = Math.floor(Math.random() * count)
-  const items = [...normals]
-  items.splice(oddIndex, 0, odd)
-  return { items, oddIndex, reason: '其他都是动物！' }
 }

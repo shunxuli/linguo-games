@@ -2,7 +2,8 @@
 import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
-import { spotSizes, generateSimpleSpotQuestion, type SpotQuestion } from '../../engine/spot'
+import { spotSizes, generateSpotQuestion, type SpotQuestion } from '../../engine/spot'
+import { createSeededRandom } from '../../engine/sudoku'
 
 const game = useGameStore()
 const { speech, sound, addScore, storage } = useGameServices()
@@ -18,9 +19,10 @@ const correctCount = ref(0)
 const streak = ref(0)
 const score = ref(0)
 const gameover = ref(false)
+let questionSeed = 0
 
 function newQuestion() {
-  question.value = generateSimpleSpotQuestion(difficulty.value)
+  question.value = generateSpotQuestion(difficulty.value, createSeededRandom(Date.now() + questionSeed++))
   selectedIdx.value = null
   answerState.value = 'waiting'
   questionNum.value++
