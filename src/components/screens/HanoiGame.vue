@@ -256,7 +256,7 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
 .peg-pole { width: 6px; height: 85%; background: #C4A97D; border-radius: 3px; position: absolute; bottom: 6px; }
 .peg-label { display: none; }
 
-.rings-stack { position: absolute; bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 0; transition: box-shadow 0.2s; }
+.rings-stack { position: absolute; bottom: 6px; display: flex; flex-direction: column-reverse; align-items: center; gap: 0; transition: box-shadow 0.2s; }
 .rings-stack.selected { box-shadow: 0 0 0 3px var(--secondary); border-radius: var(--radius-md); }
 .rings-stack.invalid { animation: invalidShake 0.3s ease; }
 
