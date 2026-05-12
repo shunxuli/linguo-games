@@ -80,6 +80,12 @@ const { getTotalScore } = useGameServices()
       >
         <span class="game-icon">📏</span><span class="game-name">排顺序</span>
       </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('hanoi-config')"
+      >
+        <span class="game-icon">🗼</span><span class="game-name">汉诺塔</span>
+      </button>
     </div>
   </div>
 </template>
@@ -131,13 +137,13 @@ const { getTotalScore } = useGameServices()
 
 .game-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
   margin-bottom: 20px;
 }
 
 .game-card {
-  padding: 14px 8px;
+  padding: 10px 4px;
   box-shadow: var(--shadow-soft);
   cursor: pointer;
   transition: all 0.25s ease;

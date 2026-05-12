@@ -11,6 +11,7 @@ import SpotConfig from './components/screens/SpotConfig.vue'
 import MazeConfig from './components/screens/MazeConfig.vue'
 import MatchConfig from './components/screens/MatchConfig.vue'
 import SortConfig from './components/screens/SortConfig.vue'
+import HanoiConfig from './components/screens/HanoiConfig.vue'
 import SudokuGame from './components/screens/SudokuGame.vue'
 import MathGame from './components/screens/MathGame.vue'
 import PuzzleGame from './components/screens/PuzzleGame.vue'
@@ -20,6 +21,7 @@ import SpotGame from './components/screens/SpotGame.vue'
 import MazeGame from './components/screens/MazeGame.vue'
 import MatchGame from './components/screens/MatchGame.vue'
 import SortGame from './components/screens/SortGame.vue'
+import HanoiGame from './components/screens/HanoiGame.vue'
 import TutorialModal from './components/modals/TutorialModal.vue'
 import SettingsModal from './components/modals/SettingsModal.vue'
 import ErrorModal from './components/modals/ErrorModal.vue'
@@ -96,6 +98,12 @@ function isActive(screen: string) { return game.currentScreen === screen }
     <SortConfig />
   </div>
   <div
+    class="screen"
+    :class="{ active: isActive('hanoi-config') }"
+  >
+    <HanoiConfig />
+  </div>
+  <div
     class="screen game-screen"
     :class="{ active: isActive('sudoku-game') }"
   >
@@ -148,6 +156,12 @@ function isActive(screen: string) { return game.currentScreen === screen }
     :class="{ active: isActive('sort-game') }"
   >
     <SortGame />
+  </div>
+  <div
+    class="screen game-screen"
+    :class="{ active: isActive('hanoi-game') }"
+  >
+    <HanoiGame />
   </div>
 
   <TutorialModal><slot /></TutorialModal>

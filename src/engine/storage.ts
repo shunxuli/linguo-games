@@ -79,4 +79,8 @@ export class GameStorage {
   getSortTheme(): string | null { return localStorage.getItem('sort_theme') }
   setSortSize(s: number): void { localStorage.setItem('sort_size', s.toString()) }
   getSortSize(): number | null { const s = localStorage.getItem('sort_size'); return s ? parseInt(s, 10) : null }
+
+  // Hanoi
+  setHanoiRings(r: number): void { localStorage.setItem('hanoi_rings', r.toString()) }
+  getHanoiRings(): number | null { const s = localStorage.getItem('hanoi_rings'); return s ? parseInt(s, 10) : null }
 }
