@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+:root {
+    --primary: #FF8C42;
+    --primary-dark: #E6732E;
+    --secondary: #6C5CE7;
+    --secondary-dark: #5B4BC4;
+    --success: #00D26A;
+    --danger: #FF4757;
+    --warning: #FFA502;
+    --bg-gradient-start: #FFF5E6;
+    --bg-gradient-end: #FFE0B2;
+    --card-bg: #FFFFFF;
+    --text-main: #2D3436;
+    --text-light: #636E72;
+    --shadow-soft: 0 4px 15px rgba(0,0,0,0.08);
+    --shadow-3d: 0 6px 0 rgba(0,0,0,0.15), 0 8px 20px rgba(0,0,0,0.1);
+    --shadow-3d-active: 0 2px 0 rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.1);
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+}
+
+html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    color: var(--text-main);
+    overflow: hidden;
+}
+
+#app {
+    height: 100%;
+}
