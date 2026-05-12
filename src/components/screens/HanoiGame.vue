@@ -116,7 +116,7 @@ function handleBack() {
 }
 
 const pegWidth = computed(() => `${Math.max(30, 90 / rings.value)}%`)
-const ringWidth = (r: number) => `${20 + r * 17}%`
+const ringWidth = (r: number) => `${15 + r * 20}%`
 
 // Drag support
 const dragRing = ref<number | null>(null)
@@ -211,13 +211,13 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
         >
           <div v-for="ring in state.pegs[peg - 1]" :key="ring"
             class="ring"
-            :class="{ top: ring === getTopRing(state.pegs, peg - 1) }"
+            :class="{ top: ring === getTopRing(state.pegs, peg - 1), buried: ring !== getTopRing(state.pegs, peg - 1) }"
             :style="{
               width: ringWidth(ring),
               background: COLORS[(ring - 1) % COLORS.length],
             }"
-            @mousedown.stop="onRingDragStart($event, peg - 1)"
-            @touchstart.stop="onRingDragStart($event, peg - 1)"
+            @mousedown.stop="ring === getTopRing(state.pegs, peg - 1) && onRingDragStart($event, peg - 1)"
+            @touchstart.stop="ring === getTopRing(state.pegs, peg - 1) && onRingDragStart($event, peg - 1)"
           />
         </div>
       </div>
@@ -267,9 +267,10 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
   66% { transform: translateX(3px); }
 }
 
-.ring { height: 22px; border-radius: 11px; border: 2px solid rgba(0,0,0,0.15); cursor: grab; transition: all 0.15s; }
-.ring.top:hover { filter: brightness(1.1); transform: translateY(-2px); }
-.ring:active { cursor: grabbing; }
+.ring { height: 28px; border-radius: 14px; border: 2px solid rgba(0,0,0,0.15); transition: all 0.15s; }
+.ring.top:hover { filter: brightness(1.15); transform: translateY(-3px); cursor: grab; }
+.ring.top:active { cursor: grabbing; }
+.ring.buried { opacity: 0.7; cursor: default; }
 
 .completion-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; border-radius: var(--radius-lg); }
 .completion-card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 24px; text-align: center; max-width: 300px; width: 90%; border: 3px solid var(--success); }
