@@ -4,11 +4,16 @@ export class SpeechManager {
   private queue: Array<{ text: string; lang: string }> = []
   private speaking = false
   private available = false
+  private zhVoice: SpeechSynthesisVoice | null = null
+  private enVoice: SpeechSynthesisVoice | null = null
 
   constructor() {
     this.available = typeof window !== 'undefined' && 'speechSynthesis' in window
     if (this.available) {
       this.synth = window.speechSynthesis
+      // Voices load asynchronously in most browsers
+      this.synth.onvoiceschanged = () => this._selectVoices()
+      this._selectVoices()
     }
   }
 
@@ -34,6 +39,26 @@ export class SpeechManager {
     if (!this.speaking) this._processQueue()
   }
 
+  private _selectVoices(): void {
+    if (!this.synth) return
+    const voices = this.synth.getVoices()
+    if (voices.length === 0) return // Not yet loaded
+
+    // Chinese: Google > Microsoft neural > any zh voice
+    this.zhVoice =
+      voices.find(v => v.lang.startsWith('zh-CN') && /Google|Xiaoxiao|Yunyang/i.test(v.name))
+      || voices.find(v => v.lang.startsWith('zh-CN'))
+      || voices.find(v => v.lang.startsWith('zh'))
+      || null
+
+    // English: Google > Microsoft > any en voice
+    this.enVoice =
+      voices.find(v => v.lang.startsWith('en') && /Google|Microsoft/i.test(v.name))
+      || voices.find(v => v.lang.startsWith('en-US'))
+      || voices.find(v => v.lang.startsWith('en'))
+      || null
+  }
+
   private _processQueue(): void {
     if (this.queue.length === 0) {
       this.speaking = false
@@ -43,10 +68,11 @@ export class SpeechManager {
     const { text, lang } = this.queue.shift()!
     const utter = new SpeechSynthesisUtterance(text)
     utter.lang = lang
-    utter.rate = lang === 'zh-CN' ? 0.9 : 0.85
-    utter.pitch = 1.1
+    utter.voice = lang === 'zh-CN' ? this.zhVoice : this.enVoice
+    utter.rate = 0.85
+    utter.pitch = 1.05
     utter.volume = 1
-    utter.onend = () => setTimeout(() => this._processQueue(), 150)
+    utter.onend = () => setTimeout(() => this._processQueue(), 120)
     utter.onerror = () => this._processQueue()
     this.synth!.speak(utter)
   }
