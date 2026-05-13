@@ -101,7 +101,8 @@ function selectAnswer(index: number) {
     wrongIdx.value = index
     sound.playError()
     speech.cancelAll()
-    speech.speak('不对，再试试！', 'zh-CN')
+    const wrongChar = question.value?.options[index]?.char || '这个'
+    speech.speak('不对，这是' + wrongChar + '，再试试！', 'zh-CN')
     setTimeout(() => { answerState.value = 'waiting'; wrongIdx.value = null }, 600)
   }
 }
