@@ -6,7 +6,6 @@ export interface MazeCell {
   bottom: boolean
   left: boolean
   visited: boolean
-  onPath?: boolean
 }
 
 export interface MazePosition {
@@ -90,38 +89,6 @@ export function generateMaze(
     }
   }
 
-  // Find the solution path and mark it
-  const path = findPath(grid, { x: startX, y: startY }, { x: size - 1, y: size - 1 })
-  const pathSet = new Set(path.map(p => `${p.x},${p.y}`))
-
-  // Break extra walls only between non-path cells (creates loops in side branches)
-  const loops = size === 4 ? 0 : size === 6 ? 1 : 2
-  let broken = 0
-  for (let attempt = 0; attempt < size * size * 4 && broken < loops; attempt++) {
-    const x = Math.floor(prng() * size)
-    const y = Math.floor(prng() * size)
-    // Try right wall: break if at least one side is NOT on the solution path
-    if (x < size - 1 && grid[y][x].right) {
-      const key1 = `${x},${y}`
-      const key2 = `${x + 1},${y}`
-      if (!pathSet.has(key1) || !pathSet.has(key2)) {
-        grid[y][x].right = false
-        grid[y][x + 1].left = false
-        broken++
-      }
-    }
-    // Try bottom wall
-    if (broken < loops && y < size - 1 && grid[y][x].bottom) {
-      const key1 = `${x},${y}`
-      const key2 = `${x},${y + 1}`
-      if (!pathSet.has(key1) || !pathSet.has(key2)) {
-        grid[y][x].bottom = false
-        grid[y + 1][x].top = false
-        broken++
-      }
-    }
-  }
-
   // Entry at top-left edge, exit at bottom-right edge
   grid[0][0].top = false
   grid[size - 1][size - 1].bottom = false
@@ -143,51 +110,4 @@ export function canMove(grid: MazeCell[][], x: number, y: number, dir: string): 
     case 'left': return !cell.left
   }
   return false
-}
-
-function findPath(grid: MazeCell[][], start: MazePosition, end: MazePosition): MazePosition[] {
-  const visited = new Set<string>()
-  const queue: Array<{ pos: MazePosition; prev: string | null }> = []
-  const parent = new Map<string, string>()
-
-  queue.push({ pos: start, prev: null })
-  visited.add(`${start.x},${start.y}`)
-
-  while (queue.length > 0) {
-    const { pos } = queue.shift()!
-    if (pos.x === end.x && pos.y === end.y) {
-      // Reconstruct path
-      const path: MazePosition[] = []
-      let key: string | null = `${pos.x},${pos.y}`
-      while (key) {
-        const [x, y] = key.split(',').map(Number)
-        path.unshift({ x, y })
-        key = parent.get(key) ?? null
-      }
-      return path
-    }
-    // Try each direction
-    const dirs: Array<{ dx: number; dy: number }> = [
-      { dx: 0, dy: -1 }, { dx: 1, dy: 0 }, { dx: 0, dy: 1 }, { dx: -1, dy: 0 },
-    ]
-    for (const { dx, dy } of dirs) {
-      const nx = pos.x + dx
-      const ny = pos.y + dy
-      const nkey = `${nx},${ny}`
-      if (nx < 0 || ny < 0 || nx >= grid[0].length || ny >= grid.length) continue
-      if (visited.has(nkey)) continue
-      // Check if move is valid
-      const cell = grid[pos.y][pos.x]
-      let canGo = false
-      if (dx === 0 && dy === -1) canGo = !cell.top
-      if (dx === 1 && dy === 0) canGo = !cell.right
-      if (dx === 0 && dy === 1) canGo = !cell.bottom
-      if (dx === -1 && dy === 0) canGo = !cell.left
-      if (!canGo) continue
-      visited.add(nkey)
-      parent.set(nkey, `${pos.x},${pos.y}`)
-      queue.push({ pos: { x: nx, y: ny }, prev: `${pos.x},${pos.y}` })
-    }
-  }
-  return []
 }
