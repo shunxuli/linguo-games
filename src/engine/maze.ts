@@ -36,12 +36,13 @@ export function generateMaze(
     }
   }
 
-  // Recursive backtracker
+  // Recursive backtracker with weighted direction
   const stack: MazePosition[] = []
   const startX = 0
   const startY = 0
   grid[startY][startX].visited = true
   stack.push({ x: startX, y: startY })
+  let lastDir = ''
 
   while (stack.length > 0) {
     const current = stack[stack.length - 1]
@@ -57,7 +58,15 @@ export function generateMaze(
       neighbors.push({ x: current.x - 1, y: current.y, dir: 'left' })
 
     if (neighbors.length > 0) {
-      const chosen = neighbors[Math.floor(prng() * neighbors.length)]
+      // Weighted selection: 70% chance to continue same direction (longer corridors)
+      let chosen: (typeof neighbors)[0]
+      if (lastDir && prng() < 0.7) {
+        const same = neighbors.find(n => n.dir === lastDir)
+        chosen = same ?? neighbors[Math.floor(prng() * neighbors.length)]
+      } else {
+        chosen = neighbors[Math.floor(prng() * neighbors.length)]
+      }
+      lastDir = chosen.dir
       // Remove walls between current and chosen
       if (chosen.dir === 'top') {
         grid[current.y][current.x].top = false
@@ -76,6 +85,24 @@ export function generateMaze(
       stack.push({ x: chosen.x, y: chosen.y })
     } else {
       stack.pop()
+      lastDir = ''
+    }
+  }
+
+  // Break extra walls to create loops (approach 2 — for complexity)
+  const loops = size === 4 ? 0 : size === 6 ? 1 : 2
+  for (let i = 0; i < loops * 3; i++) { // Try up to 3x to find breakable walls
+    const x = Math.floor(prng() * size)
+    const y = Math.floor(prng() * size)
+    // Try right wall
+    if (x < size - 1 && grid[y][x].right && grid[y][x + 1].visited && grid[y][x].visited) {
+      grid[y][x].right = false
+      grid[y][x + 1].left = false
+    }
+    // Try bottom wall
+    if (y < size - 1 && grid[y][x].bottom && grid[y + 1][x].visited && grid[y][x].visited) {
+      grid[y][x].bottom = false
+      grid[y + 1][x].top = false
     }
   }
 
