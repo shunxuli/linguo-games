@@ -69,6 +69,45 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 function handleBack() {
   game.showConfirm('返回', '确定要退出吗？', () => game.navigateBackToConfig())
 }
+
+// Swipe/drag support
+let dragStartX = 0
+let dragStartY = 0
+let dragActive = false
+const SWIPE_THRESHOLD = 20
+
+function onDragStart(e: MouseEvent | TouchEvent) {
+  if (isComplete.value) return
+  e.preventDefault()
+  const pt = 'touches' in e ? e.touches[0] : e
+  dragStartX = pt.clientX
+  dragStartY = pt.clientY
+  dragActive = true
+}
+
+function onDragMove(e: MouseEvent | TouchEvent) {
+  if (!dragActive || isComplete.value) return
+  const pt = 'touches' in e ? e.touches[0] : e
+  if (!pt) return
+  const dx = pt.clientX - dragStartX
+  const dy = pt.clientY - dragStartY
+
+  if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return
+
+  // Determine direction (dominant axis)
+  if (Math.abs(dx) > Math.abs(dy)) {
+    move(dx > 0 ? 'right' : 'left')
+  } else {
+    move(dy > 0 ? 'down' : 'up')
+  }
+  // Reset to allow only one move per drag
+  dragStartX = pt.clientX
+  dragStartY = pt.clientY
+}
+
+function onDragEnd() {
+  dragActive = false
+}
 </script>
 
 <template>
@@ -88,6 +127,13 @@ function handleBack() {
       :style="{
         gridTemplateColumns: `repeat(${size}, 1fr)`,
       }"
+      @mousedown="onDragStart"
+      @touchstart.prevent="onDragStart"
+      @mousemove="onDragMove"
+      @touchmove.prevent="onDragMove"
+      @mouseup="onDragEnd"
+      @touchend="onDragEnd"
+      @mouseleave="onDragEnd"
     >
       <template v-for="(row, y) in grid" :key="y">
         <div
@@ -159,6 +205,9 @@ function handleBack() {
   border: 4px solid #444;
   border-radius: var(--radius-sm);
   overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .maze-cell {
