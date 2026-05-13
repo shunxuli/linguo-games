@@ -99,15 +99,14 @@ function onDragMove(e: MouseEvent | TouchEvent) {
 
   if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return
 
-  // Determine direction (dominant axis)
+  // Determine direction (dominant axis) and move one cell
   if (Math.abs(dx) > Math.abs(dy)) {
     move(dx > 0 ? 'right' : 'left')
   } else {
     move(dy > 0 ? 'down' : 'up')
   }
-  // Reset to allow only one move per drag
-  dragStartX = pt.clientX
-  dragStartY = pt.clientY
+  // Stop further moves until next drag start
+  dragActive = false
 }
 
 function onDragEnd() {
