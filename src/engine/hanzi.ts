@@ -206,9 +206,10 @@ export const hanziData: HanziItem[] = [
 ]
 
 export const hanziDifficulties: Record<number, { name: string; count: number; score: number }> = {
-  1: { name: '入门', count: 31, score: 10 },
-  2: { name: '简单', count: 30, score: 20 },
-  3: { name: '困难', count: 39, score: 35 },
+  1: { name: '入门', count: 30, score: 10 },
+  2: { name: '简单', count: 62, score: 20 },
+  3: { name: '困难', count: 97, score: 35 },
+  4: { name: '全部', count: 97, score: 50 },
 }
 
 export type HanziMode = 'picture' | 'oracle' | 'audio'
