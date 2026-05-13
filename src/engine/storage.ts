@@ -89,4 +89,8 @@ export class GameStorage {
   getTangramDifficulty(): string | null { return localStorage.getItem('tangram_difficulty') }
   setTangramTargetIdx(i: number): void { localStorage.setItem('tangram_targetIdx', i.toString()) }
   getTangramTargetIdx(): number | null { const s = localStorage.getItem('tangram_targetIdx'); return s ? parseInt(s, 10) : null }
+
+  // Hanzi
+  setHanziDifficulty(d: number): void { localStorage.setItem('hanzi_difficulty', d.toString()) }
+  getHanziDifficulty(): number | null { const s = localStorage.getItem('hanzi_difficulty'); return s ? parseInt(s, 10) : null }
 }

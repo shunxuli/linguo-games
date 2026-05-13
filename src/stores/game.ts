@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export type Screen = 'lobby' | 'sudoku-config' | 'math-config' | 'puzzle-config' | 'memory-config' | 'pattern-config' | 'spot-config' | 'maze-config' | 'match-config' | 'sort-config' | 'hanoi-config' | 'tangram-config' | 'sudoku-game' | 'math-game' | 'puzzle-game' | 'memory-game' | 'pattern-game' | 'spot-game' | 'maze-game' | 'match-game' | 'sort-game' | 'hanoi-game' | 'tangram-game'
+export type Screen = 'lobby' | 'sudoku-config' | 'math-config' | 'puzzle-config' | 'memory-config' | 'pattern-config' | 'spot-config' | 'maze-config' | 'match-config' | 'sort-config' | 'hanoi-config' | 'tangram-config' | 'hanzi-config' | 'sudoku-game' | 'math-game' | 'puzzle-game' | 'memory-game' | 'pattern-game' | 'spot-game' | 'maze-game' | 'match-game' | 'sort-game' | 'hanoi-game' | 'tangram-game' | 'hanzi-game'
 
 export const useGameStore = defineStore('game', () => {
   const currentScreen = ref<Screen>('lobby')
@@ -27,6 +27,7 @@ export const useGameStore = defineStore('game', () => {
       'sort-game': 'sort-config',
       'hanoi-game': 'hanoi-config',
       'tangram-game': 'tangram-config',
+      'hanzi-game': 'hanzi-config',
     }
     currentScreen.value = map[currentScreen.value] || 'lobby'
     activeOverlay.value = null

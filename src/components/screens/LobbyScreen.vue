@@ -92,6 +92,12 @@ const { getTotalScore } = useGameServices()
       >
         <span class="game-icon">🔷</span><span class="game-name">七巧板</span>
       </button>
+      <button
+        class="game-card"
+        @click="game.navigateTo('hanzi-config')"
+      >
+        <span class="game-icon">📖</span><span class="game-name">识字</span>
+      </button>
     </div>
   </div>
 </template>
@@ -143,7 +149,7 @@ const { getTotalScore } = useGameServices()
 
 .game-cards {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
   margin-bottom: 20px;
 }

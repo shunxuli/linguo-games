@@ -13,6 +13,7 @@ import MatchConfig from './components/screens/MatchConfig.vue'
 import SortConfig from './components/screens/SortConfig.vue'
 import HanoiConfig from './components/screens/HanoiConfig.vue'
 import TangramConfig from './components/screens/TangramConfig.vue'
+import HanziConfig from './components/screens/HanziConfig.vue'
 import SudokuGame from './components/screens/SudokuGame.vue'
 import MathGame from './components/screens/MathGame.vue'
 import PuzzleGame from './components/screens/PuzzleGame.vue'
@@ -24,6 +25,7 @@ import MatchGame from './components/screens/MatchGame.vue'
 import SortGame from './components/screens/SortGame.vue'
 import HanoiGame from './components/screens/HanoiGame.vue'
 import TangramGame from './components/screens/TangramGame.vue'
+import HanziGame from './components/screens/HanziGame.vue'
 import TutorialModal from './components/modals/TutorialModal.vue'
 import SettingsModal from './components/modals/SettingsModal.vue'
 import ErrorModal from './components/modals/ErrorModal.vue'
@@ -112,6 +114,12 @@ function isActive(screen: string) { return game.currentScreen === screen }
     <TangramConfig />
   </div>
   <div
+    class="screen"
+    :class="{ active: isActive('hanzi-config') }"
+  >
+    <HanziConfig />
+  </div>
+  <div
     class="screen game-screen"
     :class="{ active: isActive('sudoku-game') }"
   >
@@ -176,6 +184,12 @@ function isActive(screen: string) { return game.currentScreen === screen }
     :class="{ active: isActive('tangram-game') }"
   >
     <TangramGame />
+  </div>
+  <div
+    class="screen game-screen"
+    :class="{ active: isActive('hanzi-game') }"
+  >
+    <HanziGame />
   </div>
 
   <TutorialModal><slot /></TutorialModal>
