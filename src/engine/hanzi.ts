@@ -125,7 +125,7 @@ export interface HanziQuestion {
   correctIndex: number
 }
 
-export function generateQuestion(difficulty: number, prng: () => number = Math.random): HanziQuestion {
+export function generateQuestion(difficulty: number, mode: HanziMode, prng: () => number = Math.random): HanziQuestion {
   const pool = hanziData.filter(h => h.difficulty <= difficulty)
   const correct = pool[Math.floor(prng() * pool.length)]
   const others = pool.filter(h => h.char !== correct.char)
@@ -141,11 +141,12 @@ export function generateQuestion(difficulty: number, prng: () => number = Math.r
     [options[i], options[j]] = [options[j], options[i]]
   }
   const modes: HanziMode[] = ['picture', 'oracle', 'audio']
-  const mode = modes[Math.floor(prng() * modes.length)]
+  const modeIdx = modes.indexOf(mode)
+  const chosenMode = modes[modeIdx >= 0 ? modeIdx : Math.floor(prng() * modes.length)]
 
   return {
     item: correct,
-    mode,
+    mode: chosenMode,
     options,
     correctIndex: options.indexOf(correct),
   }

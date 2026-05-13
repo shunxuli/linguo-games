@@ -2,26 +2,43 @@
 import { ref, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
-import { hanziDifficulties } from '../../engine/hanzi'
+import { hanziDifficulties, type HanziMode } from '../../engine/hanzi'
 
 const game = useGameStore()
 const { storage } = useGameServices()
 const selectedDiff = ref(1)
+const selectedMode = ref<HanziMode>('picture')
+
+const modes: Array<{ key: HanziMode; icon: string; name: string }> = [
+  { key: 'picture', icon: '🖼️', name: '看图识字' },
+  { key: 'oracle', icon: '🏺', name: '象形识字' },
+  { key: 'audio', icon: '🔊', name: '听音识字' },
+]
 
 watch(() => game.currentScreen, (screen) => {
   if (screen === 'hanzi-config') {
     const d = storage.getHanziDifficulty()
     if (d) selectedDiff.value = d
+    const m = storage.getHanziMode()
+    if (m) selectedMode.value = m as HanziMode
   }
 })
 function selectDifficulty(d: number) { selectedDiff.value = d; storage.setHanziDifficulty(d) }
-function start() { storage.setHanziDifficulty(selectedDiff.value); game.navigateTo('hanzi-game') }
+function selectMode(m: HanziMode) { selectedMode.value = m; storage.setHanziMode(m) }
+function start() {
+  storage.setHanziDifficulty(selectedDiff.value)
+  storage.setHanziMode(selectedMode.value)
+  game.navigateTo('hanzi-game')
+}
 </script>
 
 <template>
   <div class="config-container">
     <h2 class="config-title">📖 识字</h2>
-    <p class="config-desc">看图、看甲骨文、听发音，选出正确的汉字！</p>
+    <p class="config-desc">选择学习模式，选出正确的汉字！</p>
+    <div class="config-section"><label>选择模式</label><div class="mode-grid">
+      <button v-for="m in modes" :key="m.key" class="mode-btn" :class="{ selected: selectedMode === m.key }" @click="selectMode(m.key)">{{ m.icon }} {{ m.name }}</button>
+    </div></div>
     <div class="config-section"><label>选择难度</label><div class="mode-grid">
       <button v-for="(d, v) in hanziDifficulties" :key="v" class="mode-btn" :class="{ selected: selectedDiff === Number(v) }" @click="selectDifficulty(Number(v))">{{ d.name }} · {{ d.count }}字</button>
     </div></div>

@@ -93,4 +93,6 @@ export class GameStorage {
   // Hanzi
   setHanziDifficulty(d: number): void { localStorage.setItem('hanzi_difficulty', d.toString()) }
   getHanziDifficulty(): number | null { const s = localStorage.getItem('hanzi_difficulty'); return s ? parseInt(s, 10) : null }
+  setHanziMode(m: string): void { localStorage.setItem('hanzi_mode', m) }
+  getHanziMode(): string | null { return localStorage.getItem('hanzi_mode') }
 }

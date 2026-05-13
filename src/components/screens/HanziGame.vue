@@ -2,13 +2,14 @@
 import { ref, watch, computed } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
-import { generateQuestion, hanziDifficulties, type HanziQuestion, type HanziItem } from '../../engine/hanzi'
+import { generateQuestion, hanziDifficulties, type HanziQuestion, type HanziItem, type HanziMode } from '../../engine/hanzi'
 import { createSeededRandom } from '../../engine/sudoku'
 
 const game = useGameStore()
 const { speech, sound, addScore, storage } = useGameServices()
 
 const difficulty = ref(1)
+const mode = ref<HanziMode>('picture')
 const info = computed(() => hanziDifficulties[difficulty.value])
 const baseScore = computed(() => info.value?.score || 10)
 
@@ -23,7 +24,7 @@ let seed = 0
 const totalNeeded = 10
 
 function newQuestion() {
-  question.value = generateQuestion(difficulty.value, createSeededRandom(Date.now() + seed++))
+  question.value = generateQuestion(difficulty.value, mode.value, createSeededRandom(Date.now() + seed++))
   answerState.value = 'waiting'
   qNum.value++
   if (question.value?.mode === 'audio') {
@@ -45,6 +46,8 @@ watch(() => game.currentScreen, (screen) => {
   if (screen === 'hanzi-game') {
     const d = storage.getHanziDifficulty()
     if (d) difficulty.value = d
+    const m = storage.getHanziMode()
+    if (m) mode.value = m as HanziMode
     qNum.value = 0
     correctCount.value = 0
     streak.value = 0
@@ -99,6 +102,7 @@ function handleBack() {
     <div class="header">
       <button class="header-btn" @click="handleBack">← 返回</button>
       <span class="badge">{{ info?.name }} · {{ info?.count }}字</span>
+      <span class="badge mode-badge">{{ mode === 'picture' ? '🖼️ 看图' : mode === 'oracle' ? '🏺 象形' : '🔊 听音' }}</span>
       <div class="progress">✅ {{ correctCount }}/{{ totalNeeded }} ⭐ {{ score }}</div>
     </div>
 

@@ -100,7 +100,8 @@ function stopDemo() {
 }
 
 function speedDown() {
-  const speeds = [3000, 2000, 1000, 500]
+  // Make slower = larger interval
+  const speeds = [500, 1000, 2000, 3000]
   const current = speeds.indexOf(demoSpeed.value)
   if (current < speeds.length - 1) {
     demoSpeed.value = speeds[current + 1]
@@ -109,7 +110,8 @@ function speedDown() {
 }
 
 function speedUp() {
-  const speeds = [3000, 2000, 1000, 500]
+  // Make faster = smaller interval
+  const speeds = [500, 1000, 2000, 3000]
   const current = speeds.indexOf(demoSpeed.value)
   if (current > 0) {
     demoSpeed.value = speeds[current - 1]
@@ -213,9 +215,9 @@ function onRingDragEnd(e: MouseEvent | TouchEvent) {
         <button class="header-btn small" :disabled="demoRunning || state.moves === 0" @click="handleUndo">↩ 撤销</button>
         <button class="header-btn small demo" :disabled="demoRunning || state.pegs[0].length !== state.ringCount" @click="startDemo">▶ 演示</button>
         <button v-if="demoRunning" class="header-btn small stop" @click="stopDemo">■ 停止</button>
-        <button class="header-btn small speed-btn" :disabled="demoSpeed <= 500" @click="speedUp">⏩</button>
-        <span class="speed-label">{{ demoSpeed / 1000 }}s</span>
         <button class="header-btn small speed-btn" :disabled="demoSpeed >= 3000" @click="speedDown">⏪</button>
+        <span class="speed-label">{{ demoSpeed / 1000 }}s</span>
+        <button class="header-btn small speed-btn" :disabled="demoSpeed <= 500" @click="speedUp">⏩</button>
       </div>
     </div>
 
