@@ -13,6 +13,7 @@ const modes: Array<{ key: HanziMode; icon: string; name: string }> = [
   { key: 'picture', icon: '🖼️', name: '看图识字' },
   { key: 'oracle', icon: '🏺', name: '象形识字' },
   { key: 'audio', icon: '🔊', name: '听音识字' },
+  { key: 'browse', icon: '📷', name: '汉字浏览' },
 ]
 
 watch(() => game.currentScreen, (screen) => {

@@ -26,7 +26,6 @@ import SortGame from './components/screens/SortGame.vue'
 import HanoiGame from './components/screens/HanoiGame.vue'
 import TangramGame from './components/screens/TangramGame.vue'
 import HanziGame from './components/screens/HanziGame.vue'
-import BrowseGame from './components/screens/BrowseGame.vue'
 import TutorialModal from './components/modals/TutorialModal.vue'
 import SettingsModal from './components/modals/SettingsModal.vue'
 import ErrorModal from './components/modals/ErrorModal.vue'
@@ -191,12 +190,6 @@ function isActive(screen: string) { return game.currentScreen === screen }
     :class="{ active: isActive('hanzi-game') }"
   >
     <HanziGame />
-  </div>
-  <div
-    class="screen"
-    :class="{ active: isActive('browse') }"
-  >
-    <BrowseGame />
   </div>
 
   <TutorialModal><slot /></TutorialModal>

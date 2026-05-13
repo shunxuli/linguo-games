@@ -212,7 +212,7 @@ export const hanziDifficulties: Record<number, { name: string; count: number; sc
   4: { name: '全部', count: 97, score: 50 },
 }
 
-export type HanziMode = 'picture' | 'oracle' | 'audio'
+export type HanziMode = 'picture' | 'oracle' | 'audio' | 'browse'
 
 export interface HanziQuestion {
   item: HanziItem

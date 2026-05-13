@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
 import { generateQuestion, hanziDifficulties, type HanziQuestion, type HanziItem, type HanziMode } from '../../engine/hanzi'
@@ -53,7 +53,12 @@ watch(() => game.currentScreen, (screen) => {
     streak.value = 0
     score.value = 0
     seed = 0
-    newQuestion()
+    if (mode.value === 'browse') {
+      initBrowse()
+      browseIdx.value = 0
+    } else {
+      newQuestion()
+    }
   }
 })
 
@@ -95,10 +100,62 @@ function selectAnswer(index: number) {
 function handleBack() {
   game.showConfirm('返回', '确定要退出吗？', () => game.navigateBackToConfig())
 }
+
+// Browse mode state
+const browseIdx = ref(0)
+const browseFiles = ref<string[]>([])
+const browseLoaded = ref(false)
+
+function initBrowse() {
+  if (browseLoaded.value) return
+  const files = [
+    '13420631487449290.jpeg', '13420631507716150.jpeg', '13420631520416613.jpeg', '13420631530817498.jpeg', '13420631543595438.jpeg',
+    '13420631558865811.jpeg', '13420631569204896.jpeg', '13420631578300429.jpeg', '13420631591950345.jpeg', '13420631601963095.jpeg',
+    '13420631612406452.jpeg', '13420631628283056.jpeg', '13420631639547790.jpeg', '13420631649870795.jpeg', '13420631663018209.jpeg',
+    '13420631674398757.jpeg', '13420631684550291.jpeg', '13420631694758349.jpeg', '13421751175700809.jpeg', '13421751191017596.jpeg',
+    '13421751205426598.jpeg', '13421751217188658.jpeg', '13421751227750793.jpeg', '13421751238726301.jpeg', '13421751249617406.jpeg',
+    '13421751259212305.jpeg', '13421751269231781.jpeg', '13421751280954542.jpeg', '13421751290460779.jpeg', '13421751301159437.jpeg',
+    '13421751311642184.jpeg', '13421751321288206.jpeg', '13421751330664209.jpeg', '13421751339875174.jpeg', '13421751349813092.jpeg',
+    '13421751361318271.jpeg', '13421751372365388.jpeg', '13421751382286820.jpeg', '13421751392209972.jpeg', '13421751403121445.jpeg',
+    '13421751414401711.jpeg', '13421751424002058.jpeg', '13421751435101106.jpeg', '13421751445330086.jpeg', '13421751472247172.jpeg',
+    '13421751487712683.jpeg', '13421751498478396.jpeg', '13421751508972234.jpeg', '13421751520530624.jpeg', '13421751532897142.jpeg',
+  ]
+  browseFiles.value = files
+  browseLoaded.value = true
+}
+
+function browsePrev() { if (browseIdx.value > 0) browseIdx.value-- }
+function browseNext() { if (browseIdx.value < browseFiles.value.length - 1) browseIdx.value++ }
+
+function handleBrowseKey(e: KeyboardEvent) {
+  if (game.currentScreen !== 'hanzi-game' || mode.value !== 'browse') return
+  if (e.key === 'ArrowLeft') browsePrev()
+  if (e.key === 'ArrowRight') browseNext()
+  if (e.key === 'Escape') game.navigateBackToConfig()
+}
+
+onMounted(() => window.addEventListener('keydown', handleBrowseKey))
+onUnmounted(() => window.removeEventListener('keydown', handleBrowseKey))
 </script>
 
 <template>
-  <div class="game-container">
+  <!-- Browse mode -->
+  <div v-if="mode === 'browse'" class="browse-container">
+    <div class="browse-header">
+      <button class="browse-back" @click="game.navigateBackToConfig()">← 返回</button>
+      <span class="browse-count">{{ browseIdx + 1 }} / {{ browseFiles.length }}</span>
+    </div>
+    <div class="browse-image-area" @click="browseNext">
+      <img v-if="browseFiles[browseIdx]" :src="'browse/' + browseFiles[browseIdx]" class="browse-img" alt="浏览图片" />
+    </div>
+    <div class="browse-nav">
+      <button class="browse-btn" :disabled="browseIdx <= 0" @click="browsePrev">◀ 上一张</button>
+      <button class="browse-btn" :disabled="browseIdx >= browseFiles.length - 1" @click="browseNext">下一张 ▶</button>
+    </div>
+  </div>
+
+  <!-- Quiz modes -->
+  <div v-else class="game-container">
     <div class="header">
       <button class="header-btn" @click="handleBack">← 返回</button>
       <span class="badge">{{ info?.name }} · {{ info?.count }}字</span>
@@ -107,14 +164,11 @@ function handleBack() {
     </div>
 
     <div v-if="question" class="question-area">
-      <!-- Mode label -->
       <div class="mode-label">
         <span v-if="question.mode === 'picture'">🖼️ 看图识字</span>
         <span v-else-if="question.mode === 'oracle'">🏺 象形识字</span>
         <span v-else>🔊 听音识字 <button class="replay-btn" @click="speakChar(question.item)">🔁</button></span>
       </div>
-
-      <!-- Question display -->
       <div class="prompt">
         <template v-if="question.mode === 'picture'">
           <span class="big-emoji">{{ question.item.emoji }}</span>
@@ -126,26 +180,17 @@ function handleBack() {
           <div class="audio-hint">👂 听声音选字</div>
         </template>
       </div>
-
-      <!-- Options -->
       <div class="options">
-        <button
-          v-for="(opt, i) in question.options"
-          :key="opt.char"
-          class="char-btn"
-          :class="{
-            correct: answerState === 'correct' && i === question.correctIndex,
-            wrong: answerState !== 'waiting' && i !== question.correctIndex,
-          }"
-          :disabled="answerState !== 'waiting'"
-          @click="selectAnswer(i)"
-        >{{ opt.char }}</button>
+        <button v-for="(opt, i) in question.options" :key="opt.char" class="char-btn"
+          :class="{ correct: answerState === 'correct' && i === question.correctIndex, wrong: answerState !== 'waiting' && i !== question.correctIndex }"
+          :disabled="answerState !== 'waiting'" @click="selectAnswer(i)">{{ opt.char }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* Quiz styles */
 .game-container { width: 100%; max-width: 500px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 16px; min-height: 100%; }
 .header { width: 100%; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .header-btn { padding: 8px 12px; border-radius: var(--radius-sm); border: none; background: var(--card-bg); cursor: pointer; font-family: inherit; font-size: 0.9rem; box-shadow: var(--shadow-soft); }
@@ -166,4 +211,15 @@ function handleBack() {
 .char-btn.wrong { border-color: var(--danger); animation: shake 0.4s; }
 @keyframes pop { 50% { transform: scale(1.1); } }
 @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+/* Browse styles */
+.browse-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #1a1a2e; }
+.browse-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: rgba(0,0,0,0.3); }
+.browse-back { padding: 8px 16px; border-radius: var(--radius-sm); border: none; background: rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+.browse-count { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+.browse-image-area { flex: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; padding: 16px; }
+.browse-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+.browse-nav { display: flex; gap: 12px; justify-content: center; padding: 12px 16px; background: rgba(0,0,0,0.3); }
+.browse-btn { padding: 10px 24px; border-radius: var(--radius-sm); border: none; background: rgba(255,255,255,0.15); color: #fff; cursor: pointer; font-family: inherit; font-size: 1rem; }
+.browse-btn:disabled { opacity: 0.3; cursor: default; }
 </style>
