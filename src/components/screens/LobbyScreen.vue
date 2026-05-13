@@ -98,6 +98,12 @@ const { getTotalScore } = useGameServices()
       >
         <span class="game-icon">📖</span><span class="game-name">识字</span>
       </button>
+      <button
+        class="game-card browse"
+        @click="game.navigateTo('browse')"
+      >
+        <span class="game-icon">🖼️</span><span class="game-name">浏览</span>
+      </button>
     </div>
   </div>
 </template>
