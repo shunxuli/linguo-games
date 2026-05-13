@@ -15,6 +15,7 @@ const baseScore = computed(() => info.value?.score || 10)
 
 const question = ref<HanziQuestion | null>(null)
 const answerState = ref<'waiting' | 'correct' | 'wrong'>('waiting')
+const wrongIdx = ref<number | null>(null)
 const qNum = ref(0)
 const correctCount = ref(0)
 const streak = ref(0)
@@ -77,7 +78,9 @@ function selectAnswer(index: number) {
     addScore(baseScore.value + bonus)
     sound.playSuccess()
     if (question.value?.item) {
-      speech.speak('对了！' + question.value.item.char + '，' + question.value.item.meaning, 'zh-CN')
+      const item = question.value.item
+      speech.cancelAll()
+      speech.speak('对了！' + item.char + '，' + item.word + '的' + item.char, 'zh-CN')
     }
     if (correctCount.value >= totalNeeded) {
       sound.playWin()
@@ -87,16 +90,16 @@ function selectAnswer(index: number) {
         game.showOverlay('win', { message: '认识了' + correctCount.value + '个汉字！', score: score.value })
       }, 800)
     } else {
-      setTimeout(() => newQuestion(), 1000)
+      setTimeout(() => newQuestion(), 3000)
     }
   } else {
     streak.value = 0
     answerState.value = 'wrong'
+    wrongIdx.value = index
     sound.playError()
-    if (question.value?.item) {
-      speech.speak('不对，这是' + question.value.options[index].char + '。再试试！', 'zh-CN')
-    }
-    setTimeout(() => { answerState.value = 'waiting' }, 500)
+    speech.cancelAll()
+    speech.speak('不对，再试试！', 'zh-CN')
+    setTimeout(() => { answerState.value = 'waiting'; wrongIdx.value = null }, 600)
   }
 }
 
@@ -185,7 +188,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleBrowseKey))
       </div>
       <div class="options">
         <button v-for="(opt, i) in question.options" :key="opt.char" class="char-btn"
-          :class="{ correct: answerState === 'correct' && i === question.correctIndex, wrong: answerState !== 'waiting' && i !== question.correctIndex }"
+          :class="{ correct: answerState === 'correct' && i === question.correctIndex, wrong: answerState === 'wrong' && i === wrongIdx }"
           :disabled="answerState !== 'waiting'" @click="selectAnswer(i)">{{ opt.char }}</button>
       </div>
     </div>
