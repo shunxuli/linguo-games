@@ -80,17 +80,20 @@ function selectAnswer(index: number) {
     if (question.value?.item) {
       const item = question.value.item
       speech.cancelAll()
-      speech.speak('对了！' + item.char + '，' + item.word + '的' + item.char, 'zh-CN')
-    }
-    if (correctCount.value >= totalNeeded) {
-      sound.playWin()
-      speech.speak('太棒了！完成了！', 'zh-CN')
-      setTimeout(() => {
-        game.returnScreen = 'hanzi-config'
-        game.showOverlay('win', { message: '认识了' + correctCount.value + '个汉字！', score: score.value })
-      }, 800)
-    } else {
-      setTimeout(() => newQuestion(), 3000)
+      if (correctCount.value >= totalNeeded) {
+        const total = totalNeeded
+        speech.speak('对了！' + item.char + '，' + item.word + '的' + item.char, 'zh-CN', () => {
+          sound.playWin()
+          speech.speak('太棒了！完成了！', 'zh-CN', () => {
+            game.returnScreen = 'hanzi-config'
+            game.showOverlay('win', { message: '认识了' + total + '个汉字！', score: score.value })
+          })
+        })
+      } else {
+        speech.speak('对了！' + item.char + '，' + item.word + '的' + item.char, 'zh-CN', () => {
+          newQuestion()
+        })
+      }
     }
   } else {
     streak.value = 0

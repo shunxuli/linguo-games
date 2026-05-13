@@ -6,6 +6,7 @@ export class SpeechManager {
   private available = false
   private zhVoice: SpeechSynthesisVoice | null = null
   private enVoice: SpeechSynthesisVoice | null = null
+  private onDoneCallback: (() => void) | null = null
 
   constructor() {
     this.available = typeof window !== 'undefined' && 'speechSynthesis' in window
@@ -32,6 +33,7 @@ export class SpeechManager {
   cancelAll(): void {
     this.queue = []
     this.speaking = false
+    this.onDoneCallback = null
     if (this.synth) {
       try { this.synth.cancel() } catch { /* ignore */ }
     }
@@ -54,9 +56,14 @@ export class SpeechManager {
     } catch { /* ignore */ }
   }
 
-  speak(text: string, lang = 'zh-CN'): void {
-    if (!this.enabled || !this.synth || !this.available) return
+  speak(text: string, lang = 'zh-CN', onDone?: () => void): void {
+    if (!this.enabled || !this.synth || !this.available) {
+      // If speech is unavailable, fire callback immediately
+      if (onDone) onDone()
+      return
+    }
     this.queue.push({ text, lang })
+    if (onDone) this.onDoneCallback = onDone
     if (!this.speaking) this._processQueue()
   }
 
@@ -83,6 +90,9 @@ export class SpeechManager {
   private _processQueue(): void {
     if (this.queue.length === 0) {
       this.speaking = false
+      const cb = this.onDoneCallback
+      this.onDoneCallback = null
+      if (cb) cb()
       return
     }
     this.speaking = true
