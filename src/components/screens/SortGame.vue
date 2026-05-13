@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
 import { sortThemes, sortSizes, generateSortItems, isSorted, type SortItem } from '../../engine/sort'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 type ThemeKey = keyof typeof sortThemes
 

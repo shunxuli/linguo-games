@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
 import { spotSizes, generateSpotQuestion, type SpotQuestion } from '../../engine/spot'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 const game = useGameStore()
 const { speech, sound, addScore, storage } = useGameServices()

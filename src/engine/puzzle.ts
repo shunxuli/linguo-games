@@ -20,13 +20,6 @@ export interface PuzzlePiece {
   locked: boolean
 }
 
-export function createSeededRandom(seed: number): () => number {
-  let s = seed
-  return () => {
-    s = (s * 1664525 + 1013904223) | 0
-    return (s >>> 0) / 4294967296
-  }
-}
 
 export const PATTERNS: Pattern[] = [
   { id: 0, name: '彩虹条纹', type: 'stripes', dir: 'diagonal', colors: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'] },

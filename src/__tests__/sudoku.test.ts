@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { SudokuEngine, createSeededRandom } from '../engine/sudoku'
+import { SudokuEngine } from '../engine/sudoku'
+import { createSeededRandom } from '../engine/random'
 
 const engine = new SudokuEngine()
 const prng = createSeededRandom(42)

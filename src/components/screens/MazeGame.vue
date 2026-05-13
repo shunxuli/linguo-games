@@ -3,7 +3,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
 import { generateMaze, canMove, mazeSizes, type MazeCell, type MazePosition } from '../../engine/maze'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 const game = useGameStore()
 const { speech, sound, addScore, storage } = useGameServices()

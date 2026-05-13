@@ -11,7 +11,11 @@ export const useGameStore = defineStore('game', () => {
   const confirmCallback = ref<(() => void) | null>(null)
   const returnScreen = ref<Screen>('lobby')
 
-  function navigateTo(screen: Screen) { currentScreen.value = screen }
+  function navigateTo(screen: Screen) {
+    currentScreen.value = screen
+    confirmCallback.value = null
+    hideOverlay()
+  }
   function goToLobby() { currentScreen.value = 'lobby'; activeOverlay.value = null }
   function goToReturnScreen() { currentScreen.value = returnScreen.value; activeOverlay.value = null }
   function navigateBackToConfig() {

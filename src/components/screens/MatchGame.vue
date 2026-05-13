@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
 import { matchThemes, matchSizes, generateMatchPairs, shuffleSides, type MatchSide } from '../../engine/match'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 type ThemeKey = keyof typeof matchThemes
 

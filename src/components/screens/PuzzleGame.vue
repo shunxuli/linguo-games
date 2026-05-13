@@ -2,7 +2,8 @@
 import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, puzzleSizes } from '../../stores/gameServices'
-import { PATTERNS, generatePieces, isFullyCorrect, isPieceCorrect, createSeededRandom, drawPattern, type PuzzlePiece } from '../../engine/puzzle'
+import { PATTERNS, generatePieces, isFullyCorrect, isPieceCorrect, drawPattern, type PuzzlePiece } from '../../engine/puzzle'
+import { createSeededRandom } from '../../engine/random'
 
 const game = useGameStore()
 const { storage, speech, sound, addScore } = useGameServices()

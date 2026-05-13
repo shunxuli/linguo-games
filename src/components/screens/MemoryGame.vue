@@ -6,7 +6,7 @@ import {
   generateCards, getPairCount, isMatch, memoryThemes, memorySizes,
   type MemoryCard,
 } from '../../engine/memory'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 type ThemeKey = keyof typeof memoryThemes
 

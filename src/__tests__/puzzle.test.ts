@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
 import {
-  createSeededRandom,
   generatePieces,
   isFullyCorrect,
   isPieceCorrect,
   PATTERNS,
 } from '../engine/puzzle'
+import { createSeededRandom } from '../engine/random'
 
 describe('Puzzle Engine', () => {
   describe('createSeededRandom', () => {

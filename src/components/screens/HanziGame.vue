@@ -3,7 +3,7 @@ import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices } from '../../stores/gameServices'
 import { generateQuestion, hanziDifficulties, type HanziQuestion, type HanziItem, type HanziMode } from '../../engine/hanzi'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 const game = useGameStore()
 const { speech, sound, addScore, storage } = useGameServices()

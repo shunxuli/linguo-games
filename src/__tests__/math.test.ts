@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { MathEngine } from '../engine/math'
-import { createSeededRandom } from '../engine/sudoku'
+import { createSeededRandom } from '../engine/random'
 
 const engine = new MathEngine()
 const prng = createSeededRandom(123)

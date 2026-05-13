@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, mathRanges } from '../../stores/gameServices'
 import { MathEngine } from '../../engine/math'
-import { createSeededRandom } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 import type { MathOp, MathQuestion } from '../../engine/math'
 
 const game = useGameStore()

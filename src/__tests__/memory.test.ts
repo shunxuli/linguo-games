@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { generateCards, getPairCount, isMatch, memoryThemes, memorySizes, createSeededRandom } from '../engine/memory'
+import { generateCards, getPairCount, isMatch, memoryThemes, memorySizes } from '../engine/memory'
+import { createSeededRandom } from '../engine/random'
 import type { MemoryCard } from '../engine/memory'
 
 describe('Memory Engine', () => {
@@ -109,11 +110,3 @@ describe('Memory Engine', () => {
     })
   })
 })
-
-function createSeededRandom(seed: number): () => number {
-  let s = seed | 0
-  return () => {
-    s = (s * 1664525 + 1013904223) | 0
-    return (s >>> 0) / 4294967296
-  }
-}

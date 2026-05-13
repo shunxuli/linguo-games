@@ -2,7 +2,8 @@
 import { ref, watch, computed } from 'vue'
 import { useGameStore } from '../../stores/game'
 import { useGameServices, gameModes, sudokuDifficulties, type GameMode } from '../../stores/gameServices'
-import { SudokuEngine, createSeededRandom } from '../../engine/sudoku'
+import { SudokuEngine } from '../../engine/sudoku'
+import { createSeededRandom } from '../../engine/random'
 
 const game = useGameStore()
 const { storage, speech, sound, addScore } = useGameServices()
@@ -329,11 +330,25 @@ function initGame() {
   if (lm) mode.value = lm
   const ls = storage.getLastSize()
   if (ls) size.value = ls
+  // Reset drag state to prevent DOM leaks and stale state
+  clearDragState()
   // Try to restore saved game (loadSavedState checks config match internally)
   const restored = loadSavedState()
   if (!restored) {
     generatePuzzle()
   }
+}
+
+function clearDragState() {
+  dragging.value = false
+  hasMoved = false
+  preventClick = false
+  clearHoverHighlight()
+  if (dragEl) { dragEl.remove(); dragEl = null }
+  dragValue.value = null
+  dragStartX = 0
+  dragStartY = 0
+  document.querySelectorAll('.input-btn.dragging-source').forEach(b => b.classList.remove('dragging-source'))
 }
 
 watch(() => game.currentScreen, (screen) => {
