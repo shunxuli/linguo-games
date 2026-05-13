@@ -16,6 +16,7 @@ const endPos = ref<MazePosition>({ x: 3, y: 3 })
 const moves = ref(0)
 const score = ref(10)
 const isComplete = ref(false)
+const trail = ref<Map<string, string>>(new Map()) // "x,y" → direction arrow
 
 function initMaze() {
   const prng = createSeededRandom(Date.now())
@@ -26,6 +27,7 @@ function initMaze() {
   moves.value = 0
   score.value = baseScore.value
   isComplete.value = false
+  trail.value = new Map()
 }
 
 watch(() => game.currentScreen, (screen) => {
@@ -42,6 +44,9 @@ function move(dir: string) {
   if (!canMove(grid.value, x, y, dir)) return
   moves.value++
   score.value = Math.max(1, baseScore.value - Math.floor(moves.value / 4))
+  // Record trail arrow at from-cell
+  const arrows: Record<string, string> = { up: '↑', right: '→', down: '↓', left: '←' }
+  trail.value.set(`${x},${y}`, arrows[dir] || '•')
   switch (dir) {
     case 'up': playerPos.value = { x, y: y - 1 }; break
     case 'right': playerPos.value = { x: x + 1, y }; break
@@ -152,6 +157,10 @@ function onDragEnd() {
             class="player"
           >🐣</span>
           <span
+            v-else-if="trail.get(`${x},${y}`)"
+            class="trail-arrow"
+          >{{ trail.get(`${x},${y}`) }}</span>
+          <span
             v-else-if="endPos.x === x && endPos.y === y"
             class="goal"
           >🚩</span>
@@ -224,6 +233,13 @@ function onDragEnd() {
 .player {
   font-size: 1.8rem;
   z-index: 1;
+}
+
+.trail-arrow {
+  font-size: 1.2rem;
+  color: #E74C3C;
+  z-index: 1;
+  opacity: 0.7;
 }
 
 .goal {
