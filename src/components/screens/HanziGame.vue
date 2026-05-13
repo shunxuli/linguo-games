@@ -165,8 +165,8 @@ onUnmounted(() => window.removeEventListener('keydown', handleBrowseKey))
 
     <div v-if="question" class="question-area">
       <div class="mode-label">
-        <span v-if="question.mode === 'picture'">🖼️ 看图识字</span>
-        <span v-else-if="question.mode === 'oracle'">🏺 象形识字</span>
+        <span v-if="question.mode === 'picture'">🖼️ 看图识字 <button class="replay-btn" @click="speakChar(question.item)">🔊</button></span>
+        <span v-else-if="question.mode === 'oracle'">🏺 象形识字 <button class="replay-btn" @click="speakChar(question.item)">🔊</button></span>
         <span v-else>🔊 听音识字 <button class="replay-btn" @click="speakChar(question.item)">🔁</button></span>
       </div>
       <div class="prompt">
