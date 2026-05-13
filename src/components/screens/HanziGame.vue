@@ -24,6 +24,7 @@ let seed = 0
 const totalNeeded = 10
 
 function newQuestion() {
+  speech.cancelAll()
   question.value = generateQuestion(difficulty.value, mode.value, createSeededRandom(Date.now() + seed++))
   answerState.value = 'waiting'
   qNum.value++
@@ -35,10 +36,12 @@ function newQuestion() {
 }
 
 function speakChar(item: HanziItem) {
+  speech.cancelAll()
   speech.speak(item.char + '，' + item.meaning, 'zh-CN')
 }
 function speakCharBrief(item: HanziItem | undefined) {
   if (!item) return
+  speech.cancelAll()
   speech.speak(item.char, 'zh-CN')
 }
 
@@ -198,7 +201,8 @@ onUnmounted(() => window.removeEventListener('keydown', handleBrowseKey))
 .progress { font-size: 0.9rem; font-weight: 600; color: var(--primary); }
 .question-area { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
 .mode-label { font-size: 0.85rem; color: var(--text-light); }
-.replay-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 8px 12px; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; -webkit-tap-highlight-color: transparent; }
+.replay-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 8px 12px; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; -webkit-tap-highlight-color: transparent; border-radius: 50%; transition: background 0.1s, transform 0.1s; }
+.replay-btn:active { background: rgba(0,0,0,0.08); transform: scale(0.85); }
 .prompt { min-height: 120px; display: flex; align-items: center; justify-content: center; }
 .big-emoji { font-size: 5rem; }
 .oracle-box { width: 120px; height: 120px; }

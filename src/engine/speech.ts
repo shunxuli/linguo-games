@@ -26,7 +26,15 @@ export class SpeechManager {
 
   setEnabled(enabled: boolean): void {
     this.enabled = enabled
-    if (!enabled && this.synth) this.synth.cancel()
+    if (!enabled) this.cancelAll()
+  }
+
+  cancelAll(): void {
+    this.queue = []
+    this.speaking = false
+    if (this.synth) {
+      try { this.synth.cancel() } catch { /* ignore */ }
+    }
   }
 
   isAvailable(): boolean {
