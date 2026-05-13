@@ -198,7 +198,7 @@ onUnmounted(() => window.removeEventListener('keydown', handleBrowseKey))
 .progress { font-size: 0.9rem; font-weight: 600; color: var(--primary); }
 .question-area { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
 .mode-label { font-size: 0.85rem; color: var(--text-light); }
-.replay-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 2px 6px; }
+.replay-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 8px 12px; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; -webkit-tap-highlight-color: transparent; }
 .prompt { min-height: 120px; display: flex; align-items: center; justify-content: center; }
 .big-emoji { font-size: 5rem; }
 .oracle-box { width: 120px; height: 120px; }

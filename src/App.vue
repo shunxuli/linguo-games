@@ -34,8 +34,22 @@ import WinModal from './components/modals/WinModal.vue'
 import ConfirmModal from './components/modals/ConfirmModal.vue'
 
 const game = useGameStore()
-const { init } = useGameServices()
+const { init, initAudio } = useGameServices()
 init()
+
+// Unlock audio on first user gesture (required for mobile / WeChat)
+let audioUnlocked = false
+function onFirstTouch() {
+  if (audioUnlocked) return
+  audioUnlocked = true
+  initAudio()
+  document.removeEventListener('touchstart', onFirstTouch)
+  document.removeEventListener('click', onFirstTouch)
+}
+if (typeof document !== 'undefined') {
+  document.addEventListener('touchstart', onFirstTouch, { once: false })
+  document.addEventListener('click', onFirstTouch, { once: false })
+}
 
 function isActive(screen: string) { return game.currentScreen === screen }
 </script>

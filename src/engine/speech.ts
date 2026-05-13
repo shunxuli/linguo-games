@@ -33,6 +33,19 @@ export class SpeechManager {
     return this.available
   }
 
+  /** Warm up speech synthesis after user gesture on mobile */
+  initOnUserGesture(): void {
+    if (!this.synth || !this.available) return
+    // Some browsers need a real utterance triggered by user gesture to unlock
+    try {
+      const utter = new SpeechSynthesisUtterance('')
+      utter.volume = 0
+      utter.rate = 1
+      this.synth.speak(utter)
+      this.synth.cancel()
+    } catch { /* ignore */ }
+  }
+
   speak(text: string, lang = 'zh-CN'): void {
     if (!this.enabled || !this.synth || !this.available) return
     this.queue.push({ text, lang })

@@ -21,7 +21,13 @@ export function useGameServices() {
     return storage.getTotalScore()
   }
 
-  return { storage, speech, sound, init, addScore, getTotalScore }
+  /** Call once on first user gesture to unlock audio on mobile */
+  function initAudio() {
+    sound.initOnUserGesture()
+    speech.initOnUserGesture()
+  }
+
+  return { storage, speech, sound, init, initAudio, addScore, getTotalScore }
 }
 
 export const gameModes = {

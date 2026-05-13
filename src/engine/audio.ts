@@ -1,12 +1,27 @@
 export class SoundManager {
   enabled = true
   private audioCtx: AudioContext | null = null
+  private initialized = false
 
   initFromStorage(): void {
     const saved = localStorage.getItem('sudoku_soundEnabled')
     if (saved !== null) {
       this.enabled = saved === 'true'
     }
+  }
+
+  /** Must be called once after user gesture (tap/click) on mobile */
+  initOnUserGesture(): void {
+    if (this.initialized) return
+    this.initialized = true
+    try {
+      if (!this.audioCtx) {
+        this.audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)()
+      }
+      if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume()
+      }
+    } catch { /* ignore */ }
   }
 
   setEnabled(enabled: boolean): void {
