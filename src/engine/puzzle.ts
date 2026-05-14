@@ -78,6 +78,9 @@ export function drawPattern(
     ctx.fillRect(0, 0, w, h)
   }
 
+  // Draw subtle position-based texture to help piece differentiation
+  drawTextureOverlay(ctx, w, h)
+
   switch (pattern.type) {
     case 'stripes':
       drawStripes(ctx, w, h, pattern)
@@ -2685,6 +2688,26 @@ function drawStar(
   ctx.closePath()
 }
 
+function drawTextureOverlay(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+): void {
+  // Faint dot grid for position-based visual differentiation
+  const stepX = w / 10
+  const stepY = h / 10
+  for (let y = stepY / 2; y < h; y += stepY) {
+    for (let x = stepX / 2; x < w; x += stepX) {
+      // Color varies subtly by position so every piece has unique texture
+      const hue = ((x + y) * 0.7) % 360
+      ctx.fillStyle = `hsla(${hue}, 30%, 70%, 0.08)`
+      ctx.beginPath()
+      ctx.arc(x, y, 2.5, 0, Math.PI * 2)
+      ctx.fill()
+    }
+  }
+}
+
 function drawSurroundings(
   ctx: CanvasRenderingContext2D,
   w: number,
@@ -2720,6 +2743,20 @@ function drawSurroundings(
   }
   const list = configs[name] || []
   for (const d of list) {
+    drawDeco(ctx, d.x * w, d.y * h, d.t, d.s * Math.min(w, h), d.c, prng)
+  }
+  // Supplement: extra edge/corner dots to ensure all pieces are distinguishable
+  const supplements = [
+    {t:'drop',x:0.05,y:0.08,s:0.02,c:'rgba(80,80,80,0.12)'},
+    {t:'drop',x:0.95,y:0.08,s:0.02,c:'rgba(80,80,80,0.12)'},
+    {t:'drop',x:0.05,y:0.92,s:0.02,c:'rgba(80,80,80,0.12)'},
+    {t:'drop',x:0.95,y:0.92,s:0.02,c:'rgba(80,80,80,0.12)'},
+    {t:'drop',x:0.25,y:0.05,s:0.015,c:'rgba(60,60,60,0.09)'},
+    {t:'drop',x:0.75,y:0.05,s:0.015,c:'rgba(60,60,60,0.09)'},
+    {t:'drop',x:0.25,y:0.95,s:0.015,c:'rgba(60,60,60,0.09)'},
+    {t:'drop',x:0.75,y:0.95,s:0.015,c:'rgba(60,60,60,0.09)'},
+  ]
+  for (const d of supplements) {
     drawDeco(ctx, d.x * w, d.y * h, d.t, d.s * Math.min(w, h), d.c, prng)
   }
 }
