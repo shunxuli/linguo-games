@@ -766,7 +766,7 @@ export function drawCustom(
   // Scale up main shapes to fill more canvas, reducing blank edges
   ctx.save()
   ctx.translate(w / 2, h / 2)
-  ctx.scale(1.3, 1.3)
+  ctx.scale(1.6, 1.6)
   ctx.translate(-w / 2, -h / 2)
 
   switch (pattern.shape) {
@@ -2707,8 +2707,8 @@ function drawTextureOverlay(
   for (let y = stepY / 2; y < h; y += stepY) {
     for (let x = stepX / 2; x < w; x += stepX) {
       const hue = ((x + y) * 1.3) % 360
-      const lightness = 60 + ((x * 7 + y * 11) % 20)
-      ctx.fillStyle = `hsla(${hue}, 35%, ${lightness}%, 0.12)`
+      const lightness = 70 + ((x * 7 + y * 11) % 10)
+      ctx.fillStyle = `hsla(${hue}, 20%, ${lightness}%, 0.06)`
       ctx.beginPath()
       ctx.arc(x, y, 3, 0, Math.PI * 2)
       ctx.fill()
