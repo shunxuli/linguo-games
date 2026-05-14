@@ -25,24 +25,28 @@ export interface MathGameState {
 
 export class MathEngine {
   generateQuestion(range: number, op: MathOp, prng: () => number = Math.random): MathQuestion {
-    let num1: number, num2: number, answer: number, operator: string
+    for (let attempt = 0; attempt < 10; attempt++) {
+      let num1: number, num2: number, answer: number, operator: string
 
-    if (op === 'add' || (op === 'mix' && prng() < 0.5)) {
-      operator = '+'
-      answer = Math.floor(prng() * (range + 1))
-      num1 = Math.floor(prng() * (answer + 1))
-      num2 = answer - num1
-      if (num2 < 0) { num2 = 0; num1 = answer }
-    } else {
-      operator = '-'
-      num1 = Math.floor(prng() * (range + 1))
-      num2 = Math.floor(prng() * (num1 + 1))
-      answer = num1 - num2
+      if (op === 'add' || (op === 'mix' && prng() < 0.5)) {
+        operator = '+'
+        answer = Math.floor(prng() * (range + 1))
+        num1 = Math.floor(prng() * (answer + 1))
+        num2 = answer - num1
+        if (num2 < 0) { num2 = 0; num1 = answer }
+      } else {
+        operator = '-'
+        num1 = Math.floor(prng() * (range + 1))
+        num2 = Math.floor(prng() * (num1 + 1))
+        answer = num1 - num2
+      }
+
+      if (num1 !== 0 || num2 !== 0) {
+        return { num1, num2, answer, operator }
+      }
     }
-
-    if (num1 === 0 && num2 === 0) return this.generateQuestion(range, op, prng)
-
-    return { num1, num2, answer, operator }
+    // Fallback after max attempts
+    return { num1: 1, num2: 0, answer: 1, operator: '+' }
   }
 
   checkAnswer(userAnswer: string, correctAnswer: number): boolean {

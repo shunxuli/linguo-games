@@ -105,8 +105,7 @@ function speakCell(row: number, col: number) {
   if (val <= 0) return
   const zh = gameModes[mode.value].names.zh[val - 1]
   const en = gameModes[mode.value].names.en[val - 1]
-  speech.speak(zh, 'zh-CN')
-  setTimeout(() => speech.speak(en, 'en-US'), 600)
+  speech.speak(zh, 'zh-CN', () => speech.speak(en, 'en-US'))
 }
 
 function handleCellClick(row: number, col: number) {

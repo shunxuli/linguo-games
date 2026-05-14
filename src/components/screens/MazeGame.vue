@@ -64,6 +64,7 @@ function move(dir: string) {
 }
 
 function onKeydown(e: KeyboardEvent) {
+  if (game.currentScreen !== 'maze-game') return
   const map: Record<string, string> = { ArrowUp: 'up', ArrowRight: 'right', ArrowDown: 'down', ArrowLeft: 'left' }
   if (map[e.key]) { e.preventDefault(); move(map[e.key]) }
 }

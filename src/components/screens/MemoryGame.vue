@@ -30,6 +30,12 @@ const isComplete = ref(false)
 
 function initGame() {
   const raw = generateCards(pairCount.value, themeKey.value, createSeededRandom(Date.now()))
+  if (!raw || raw.length === 0) {
+    // Fallback to emoji theme if current theme has insufficient items
+    const fallback = generateCards(pairCount.value, 'emoji', createSeededRandom(Date.now()))
+    cards.value = fallback.map(c => ({ ...c, flipped: false, matched: false, shaking: false }))
+    return
+  }
   cards.value = raw.map(c => ({
     ...c,
     flipped: false,
