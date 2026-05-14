@@ -763,6 +763,12 @@ export function drawCustom(
   pattern: Pattern,
   prng: () => number = Math.random,
 ): void {
+  // Scale up main shapes to fill more canvas, reducing blank edges
+  ctx.save()
+  ctx.translate(w / 2, h / 2)
+  ctx.scale(1.3, 1.3)
+  ctx.translate(-w / 2, -h / 2)
+
   switch (pattern.shape) {
     case 'cat':
       drawCustomCat(ctx, w, h)
@@ -837,6 +843,8 @@ export function drawCustom(
       drawCustomMoonRabbit(ctx, w, h)
       break
   }
+
+  ctx.restore()
 }
 
 export function drawCustomCat(
@@ -2693,16 +2701,16 @@ function drawTextureOverlay(
   w: number,
   h: number,
 ): void {
-  // Faint dot grid for position-based visual differentiation
-  const stepX = w / 10
-  const stepY = h / 10
+  // Dense position-based dot grid — every 5×5 piece gets unique texture
+  const stepX = w / 14
+  const stepY = h / 14
   for (let y = stepY / 2; y < h; y += stepY) {
     for (let x = stepX / 2; x < w; x += stepX) {
-      // Color varies subtly by position so every piece has unique texture
-      const hue = ((x + y) * 0.7) % 360
-      ctx.fillStyle = `hsla(${hue}, 30%, 70%, 0.08)`
+      const hue = ((x + y) * 1.3) % 360
+      const lightness = 60 + ((x * 7 + y * 11) % 20)
+      ctx.fillStyle = `hsla(${hue}, 35%, ${lightness}%, 0.12)`
       ctx.beginPath()
-      ctx.arc(x, y, 2.5, 0, Math.PI * 2)
+      ctx.arc(x, y, 3, 0, Math.PI * 2)
       ctx.fill()
     }
   }
@@ -2745,16 +2753,27 @@ function drawSurroundings(
   for (const d of list) {
     drawDeco(ctx, d.x * w, d.y * h, d.t, d.s * Math.min(w, h), d.c, prng)
   }
-  // Supplement: extra edge/corner dots to ensure all pieces are distinguishable
+  // Supplement: dense edge/corner/mid decorations to cover all 5×5 grid cells
   const supplements = [
-    {t:'drop',x:0.05,y:0.08,s:0.02,c:'rgba(80,80,80,0.12)'},
-    {t:'drop',x:0.95,y:0.08,s:0.02,c:'rgba(80,80,80,0.12)'},
-    {t:'drop',x:0.05,y:0.92,s:0.02,c:'rgba(80,80,80,0.12)'},
-    {t:'drop',x:0.95,y:0.92,s:0.02,c:'rgba(80,80,80,0.12)'},
-    {t:'drop',x:0.25,y:0.05,s:0.015,c:'rgba(60,60,60,0.09)'},
-    {t:'drop',x:0.75,y:0.05,s:0.015,c:'rgba(60,60,60,0.09)'},
-    {t:'drop',x:0.25,y:0.95,s:0.015,c:'rgba(60,60,60,0.09)'},
-    {t:'drop',x:0.75,y:0.95,s:0.015,c:'rgba(60,60,60,0.09)'},
+    // Four corners — visible markers
+    {t:'flower',x:0.07,y:0.07,s:0.04,c:'#FF69B4'},
+    {t:'flower',x:0.93,y:0.07,s:0.04,c:'#FFD700'},
+    {t:'flower',x:0.07,y:0.93,s:0.04,c:'#9370DB'},
+    {t:'flower',x:0.93,y:0.93,s:0.04,c:'#FF6347'},
+    // Four mid-edges
+    {t:'leaf',x:0.5,y:0.05,s:0.035,c:'#228B22'},
+    {t:'leaf',x:0.5,y:0.95,s:0.035,c:'#32CD32'},
+    {t:'leaf',x:0.05,y:0.5,s:0.035,c:'#228B22'},
+    {t:'leaf',x:0.95,y:0.5,s:0.035,c:'#32CD32'},
+    // Interior grid — covers 3x3 interior positions
+    {t:'drop',x:0.25,y:0.25,s:0.025,c:'rgba(100,100,255,0.2)'},
+    {t:'drop',x:0.5,y:0.25,s:0.025,c:'rgba(255,100,100,0.2)'},
+    {t:'drop',x:0.75,y:0.25,s:0.025,c:'rgba(100,255,100,0.2)'},
+    {t:'drop',x:0.25,y:0.5,s:0.025,c:'rgba(255,255,100,0.2)'},
+    {t:'drop',x:0.75,y:0.5,s:0.025,c:'rgba(255,100,255,0.2)'},
+    {t:'drop',x:0.25,y:0.75,s:0.025,c:'rgba(100,255,255,0.2)'},
+    {t:'drop',x:0.5,y:0.75,s:0.025,c:'rgba(255,200,100,0.2)'},
+    {t:'drop',x:0.75,y:0.75,s:0.025,c:'rgba(200,100,255,0.2)'},
   ]
   for (const d of supplements) {
     drawDeco(ctx, d.x * w, d.y * h, d.t, d.s * Math.min(w, h), d.c, prng)
