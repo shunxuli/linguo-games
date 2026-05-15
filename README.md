@@ -1,6 +1,6 @@
-# 果果乐园 (linguo-games)
+# 果果乐园 (linguo-study)
 
-儿童教育游戏平台，包含数独、数学运算和拼图三款小游戏。
+儿童教育游戏平台，包含12款益智小游戏，含数独、数学、拼图、记忆卡、汉诺塔、七巧板、识字等。
 
 ## 技术栈
 
@@ -23,4 +23,4 @@ npm run build    # 构建生产版本
 ## 部署
 
 构建产物为纯静态文件，可部署到任意静态文件服务器。
-GitHub Pages 地址：`https://shunxuli.github.io/linguo-games/`
+GitHub Pages 地址：`https://shunxuli.github.io/linguo-study/`
